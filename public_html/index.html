@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+        <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
+        <!--<meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">-->
+        <meta name="msapplication-TileColor" content="#3372DF">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>App FOA</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/material.min.css">
+        <script src="js/material.min.js"></script>
+        <link rel="stylesheet" href="css/icons.css">
+        <link rel="stylesheet" href="css/app.css">
+        <script src="js/jquery-1.12.1.min.js"></script>
+        <script src="js/ajax.custom.js"></script>
+        <script src="js/showToast.js"></script>
+        <script src="js/dialog-polyfill.js"></script>
+        <script src="js/showToast.js"></script>
+        <script src="js/geraNavegacao.js"></script>
+        <link rel="stylesheet" href="css/dialog-polyfill.css">
+    </head>
+    <body>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title">Fit APP</span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                </div>
+            </header>
+            <main class="mdl-layout__content">
+                <div id="spinner" style="margin: 0 auto;position:fixed;top:25%;left:45%" class="mdl-spinner mdl-js-spinner">
+                </div>
+                <div id="content" class="page-content">
+
+                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield-margem">
+                            <input class="mdl-textfield__input"  type="number" id="login"/>
+                            <label class="mdl-textfield__label" for="login">Usuário</label>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield-margem">
+                            <input class="mdl-textfield__input" type="password" id="senha" />
+                            <label class="mdl-textfield__label" for="senha">Senha</label>
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border" >
+                            <button  onclick="login(document.getElementById('login').value, document.getElementById('senha').value)" 
+                                     class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" style="float: right">Login
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
