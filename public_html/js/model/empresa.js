@@ -4,14 +4,17 @@
  * and open the template in the editor.
  */
 
-var id = 3;
+var id = 1;
 
 function buscaEmpresa() {
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceEmpresa/getEmpresa/" + id);
+    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceEmpresa/busca/1");
     client.onreadystatechange = function () {
-        preencheCampos(client.responseText);
-        $('#spinner').removeClass('is-active');
+        if (client.readyState == 4 && client.status == 200)
+        {
+            preencheCampos(client.responseText);
+            $('#spinner').removeClass('is-active');
+        }
     };
     client.send();
 }
@@ -36,7 +39,7 @@ function preencheCampos(response) {
 
 function gravaEmpresa() {
     var client = new XMLHttpRequest();
-    client.open("PUT", "http://localhost:9999/FitFood/webresources/ServiceEmpresa/putEmpresa/");
+    client.open("PUT", "http://localhost:9999/FitFood/webresources/ServiceEmpresa/grava/");
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
