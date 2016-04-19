@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 
-var id = 1;
+var id = 101;
 
 function buscaEmpresa() {
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceEmpresa/busca/1");
+    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceEmpresa/busca/"+id);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -65,7 +65,7 @@ String.prototype.replaceCustom = function (de, para) {
 
 function formToJSON() {
     return JSON.stringify({
-        codEmpresa: $('#id').val(),
+        codEmpresa: $('#id').val()==""?0:$('#id').val(),
         "empCNPJ": $('#cnpj').val().replaceCustom(".", "").replaceCustom("/", "").replaceCustom("-", "")
     });
 }
