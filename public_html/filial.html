@@ -16,19 +16,25 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/app.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/showToast.js"></script>
+        <script src="js/jquery.mask.min.js"></script>
+        <script src="js/util.js"></script>
         <script src="js/dialog-polyfill.js"></script>
         <script src="js/showToast.js"></script>
-        <script src="js/model/filial.js"></script>
+        <script src="js/filial.js"></script>
         <script src="js/geraNavegacao.js"></script>
         <link rel="stylesheet" href="css/dialog-polyfill.css">
         <script type="text/javascript">
             $(document).ready(function () {
                 geraNavegacao();
                 buscaFilialPorEmpresa();
+                preparaModel(buscaFilialPorEmpresa, ZeraIdFilial);
+                $("#cnpj").mask("##.###.###/####-##");
             });
+
         </script>
     </head>
     <body>
+
         <div id="spinner" style="margin: 0 auto;position:fixed;top:25%;left:45%" class="mdl-spinner mdl-js-spinner is-active">
         </div>
 
@@ -50,65 +56,97 @@ and open the template in the editor.
                 </nav>
             </div>
             <main class="mdl-layout__content">
-                <form action="#">
-                    <div class="page-content">
-                        <button style="z-index: 3;bottom: 30px;right: 30px;float: right;position: fixed"  class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" type="reset">
+                <div class="page-content">
+                    <form>
+                        <!-- The Modal -->
+                        <div id="myModal" class="modal">
+
+                            <!-- Modal content -->
+                            <div class="modal-content">
+                                <div class="mdl-card  mdl-card_wide mdl mdl-shadow--6dp card-wide">
+                                    <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+                                        <h4 class="mdl-card__title-text">Dados Filial</h4>
+                                    </div>
+                                    <div class="mdl-card__menu">
+                                        <button onclick="deletaFilial()" type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                                            <i class="material-icons">&#xE92B;</i>
+                                        </button>
+                                    </div>
+                                    <div class="mdl-card__supporting-text">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input" style="text-align: right" type="text" value="" id="id" pattern="[0-9]+$" readonly=""/>
+                                            <label class="mdl-textfield__label" style="text-align: right" for="id">Código</label>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input" style="text-align: right" type="text" value="" maxlength="18" id="cnpj" pattern="(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)" />
+                                            <label class="mdl-textfield__label" style="text-align: right" for="cnpj">CNPJ</label>
+                                        </div><br>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input"  type="text" value="" maxlength="60" id="nomeFantasia" />
+                                            <label class="mdl-textfield__label"  for="nomeFantasia">Nome Fantasia</label>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input"  type="text" maxlength="60" value="" id="razaoSocial" />
+                                            <label class="mdl-textfield__label"  for="razaoSocial">Razão Social</label>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input"  type="text" value="" maxlength="12" id="inscricaoEstadual" />
+                                            <label class="mdl-textfield__label"  for="inscricaoEstadual">Inscrição Estadual</label>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input"  type="text" maxlength="16" value="" id="numero" />
+                                            <label class="mdl-textfield__label"  for="numero">Número</label>
+                                        </div>
+
+                                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="ativa">
+                                            <span class="mdl-switch__label" id="tst">Ativa</span>
+                                            <input type="checkbox" id="ativa" class="mdl-switch__input" checked>
+                                        </label>
+
+                                    </div>
+                                    <div class="mdl-card__actions mdl-card--border">
+                                        <button type="button" id="demo-show-toast" class="close mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" style="float: right" onclick="gravaFilial();"><i class="material-icons">check</i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button style="z-index: 3;bottom: 30px;right: 30px;float: right;position: fixed" id="show-dialog" class="mdl-button mdl-shadow--6dp mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" type="reset">
                             <i class="material-icons">add</i>
                         </button>
-                        <div class="mdl-card  mdl-card_wide mdl mdl-shadow--6dp card-wide">
-                            <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-                                <h4 class="mdl-card__title-text">Dados Filial</h4>
-                            </div>
-                            <div class="mdl-card__supporting-text">
+                    </form>
+                    <div style="width: 100%;overflow: auto">
 
+                        <table class="mdl-data-table mdl-js-data-table " id="tbFiliais" style="width: 100%;height: 100%">
+                            <thead>
+                                <tr>
+                                    <th class="mdl-data-table__cell--non-numeric">Filial</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Razão Social</th>
+                                    <th >Número</th>
+                                    <th>CNPJ</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Situação</th>
+                                    <th>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                                            <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
+                                                <i class="material-icons">search</i>
+                                            </label>
+                                            <div class="mdl-textfield__expandable-holder">
+                                                <input class="mdl-textfield__input" type="text" id="sample6" onkeyup="DigitaFiltro('tbFiliais', 'sample6')">
+                                                <label class="mdl-textfield__label" for="sample-expandable">Filtrar</label>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" style="text-align: right" type="text" value="" id="id" pattern="[0-9]+$" readonly=""/>
-                                    <label class="mdl-textfield__label" style="text-align: right" for="id">Código</label>
-                                </div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" style="text-align: right" type="text" value="" id="cnpj" pattern="(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)" />
-                                    <label class="mdl-textfield__label" style="text-align: right" for="cnpj">CNPJ</label>
-                                </div><br>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input"  type="text" value="" id="nomeFantasia" />
-                                    <label class="mdl-textfield__label"  for="nomeFantasia">Nome Fantasia</label>
-                                </div>
-                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="ativa">
-                                    <span class="mdl-switch__label" id="tst">Ativa</span>
-                                    <input type="checkbox" id="ativa" class="mdl-switch__input" checked>
-                                </label>
-
-                            </div>
-                            <div class="mdl-card__actions mdl-card--border">
-                                <button id="demo-show-toast" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" style="float: right" onclick="gravaFilial()">Salvar</button>
-                            </div>
-
-                        </div>
-                        <!-- Table ooooi-->
-
-                        <div class="mdl-card mdl-card_wide mdl mdl-shadow--6dp card-wide">
-                            <table class="mdl-data-table mdl-js-data-table " id="tbFiliais" style="width: 101%;height: 100%">
-                                <thead>
-                                    <tr>
-                                        <th class="mdl-data-table__cell--non-numeric">Filial</th>
-                                        <th>CNPJ</th>
-                                        <th class="mdl-data-table__cell--non-numeric">Situação</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                            <!-- Toast-->
-                        </div>
-                        <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
-                            <div class="mdl-snackbar__text"></div>
-                            <button class="mdl-snackbar__action" type="button"></button>                       
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
-                </form>
+                </div>
+                <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+                    <div class="mdl-snackbar__text"></div>
+                    <button class="mdl-snackbar__action" type="button"></button>                       
+                </div>
 
             </main>
         </div>

@@ -6,47 +6,66 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>App FOA</title>
+        <title>AppShop</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/material.min.css">
         <script src="js/material.min.js"></script>
+        <script src="js/material.js"></script>
         <link rel="stylesheet" href="css/icons.css">
         <link rel="stylesheet" href="css/app.css">
-        <script src="js/jquery-1.12.1.min.js"></script>
+        <script src="js/jquery.min.js"></script>
         <script src="js/showToast.js"></script>
+        <script src="js/util.js"></script>
+        <script src="js/mustache.js"></script>
+        <script src="js/jquery.mask.min.js"></script>
         <script src="js/dialog-polyfill.js"></script>
         <script src="js/showToast.js"></script>
+        <script src="js/pessoa.js"></script>
         <script src="js/geraNavegacao.js"></script>
         <link rel="stylesheet" href="css/dialog-polyfill.css">
         <script type="text/javascript">
             $(document).ready(function () {
                 geraNavegacao();
-                setTimeout(function () {
-                    $('#spinner').removeClass('is-active');
-                    mostraToast("demo-toast-example", "demo-show-toast", "Salvo com Sucesso");
-                }, 300);
+                buscaPessoaPorEmpresa();
+                preparaModel(buscaPessoaPorEmpresa, ZeraIdPessoa);
+                $("#cpf").mask("###.###.###-##");
             });
+
+        </script>
+        <script id="user-template" type="text/template">
+            <tr id={{codPessoa}}>
+            <td class="mdl-data-table__cell--non-numeric">{{ pesNome }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ pesEmail }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ codTipoPessoa }}</td>
+            {{#pesAtivo}}
+                <td class="mdl-data-table__cell--non-numeric">Ativo</td>
+            {{/pesAtivo}}
+            {{^pesAtivo}}
+                <td class="mdl-data-table__cell--non-numeric">Ativo</td>
+            {{/pesAtivo}}
+            <td>
+            <button id="btnSelecionar" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+            style="float: right" onclick="idPessoa={{codPessoa}};btnSeleciona();"><i class="material-icons">edit</i></button>
+            </td>
+            </tr>
         </script>
     </head>
-    <body >
-        <div id="spinner" style="margin: 0 auto;position:fixed;top:25%;left:45%" class="mdl-spinner mdl-js-spinner is-active">
+    <body>
+
+        <div id="spinner" style="margin: 0 auto;position:fixed;top:25%;left:50%" class="mdl-spinner mdl-js-spinner is-active">
         </div>
 
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
              mdl-layout--fixed-header">
-            <header class="mdl-layout__header ">
+            <header class="mdl-layout__header">
                 <div class="mdl-layout__header-row">
                     <!-- Title -->
-                    <span class="mdl-layout-title">Sua Empresa - Clientes</span>
+                    <span class="mdl-layout-title">Sua Empresa - Pessoas</span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <!-- Navigation. We hide it in small screens. -->
 
-                </div>
-                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-                    <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Procurar</a>
-                    <a href="#fixed-tab-2" class="mdl-layout__tab">Manter</a>
                 </div>
             </header>
             <div class="mdl-layout__drawer">
@@ -56,176 +75,104 @@ and open the template in the editor.
             </div>
             <main class="mdl-layout__content">
                 <div class="page-content">
-                    <button style="z-index: 3;bottom: 30px;right: 30px;float: right;position: fixed"  class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" type="reset">
-                        <i class="material-icons">add</i>
-                    </button>
-                    <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
-                        <div class="page-content">
+                    <form>
+                        <!-- The Modal -->
+                        <div id="myModal" class="modal">
 
-                            <div class="mdl-card  mdl-card_wide mdl mdl-shadow--6dp card-wide">
-                                <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-                                    <h4 class="mdl-card__title-text">Filtros</h4>
-                                </div>
-                                <div class="mdl-card__supporting-text">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" value="" id="filtroNome"  />
-                                        <label class="mdl-textfield__label" for="filtroNome">Nome</label>
+                            <!-- Modal content -->
+                            <div class="modal-content">
+                                <div class="mdl-card  mdl-card_wide mdl mdl-shadow--6dp card-wide">
+                                    <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+                                        <h4 class="mdl-card__title-text">Dados Pessoa</h4>
                                     </div>
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" value="" id="filtroEmail"  />
-                                        <label class="mdl-textfield__label" for="filtroEmail">E-mail</label>
+                                    <div class="mdl-card__menu">
+                                        <button onclick="deletaFilial()" type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                                            <i class="material-icons">&#xE92B;</i>
+                                        </button>
                                     </div>
-                                    <br>
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="filtroAdmin">
-                                            <input type="radio" id="filtroAdmin" class="mdl-radio__button" name="filtroAdmin" value="1" checked>
-                                            <span class="mdl-radio__label">Admin</span>
-                                        </label>
-                                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="filtroCliente">
-                                            <input type="radio" id="filtroCliente" class="mdl-radio__button" name="filtroAdmin" value="2">
-                                            <span class="mdl-radio__label">Cliente</span>
-                                        </label>
-                                    </div>
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for=filtroAtivo>
-                                            <span class="mdl-switch__label">Ativo</span>
-                                            <input type="checkbox" id="filtroAtivo" class="mdl-switch__input" checked>
-                                        </label>
-                                    </div>
-                                    
-                                </div>
-                            </div>
+                                    <div class="mdl-card__supporting-text">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input" style="text-align: right" type="text" value="" id="id" pattern="[0-9]+$" readonly=""/>
+                                            <label class="mdl-textfield__label" style="text-align: right" for="id">Código</label>
+                                        </div><br>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input"  type="text" maxlength="60" value="" id="pesNome" />
+                                            <label class="mdl-textfield__label"  for="pesNome">Nome</label>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input"  type="password" id="pesSenha" />
+                                            <label class="mdl-textfield__label"  for="pesSenha">Senha</label>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input"  type="text" maxlength="60" value="" id="pesEmail" />
+                                            <label class="mdl-textfield__label"  for="pesEmail">e-Mail</label>
+                                        </div>
 
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input" style="text-align: right" type="text" id="tipo"/>
+                                            <label class="mdl-textfield__label" style="text-align: right" for="tipo">Tipo</label>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input" style="text-align: right" type="text" id="cpf" pattern="(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)" maxlength="15"/>
+                                            <label class="mdl-textfield__label" style="text-align: right" for="cpf">CPF</label>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input"  type="date" value="" readonly id="pesDtCadastro" />
+                                            <label class="mdl-textfield__label"  for="pesDtCadastro">Data Cadastro</label>
+                                        </div>
 
-                            <!-- Table-->
-                            <div class="mdl-card  mdl-card_wide mdl mdl-shadow--6dp card-wide">
-                                <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-                                    <h4 class="mdl-card__title-text">Dados Cliente</h4>
-                                </div>
-                                <div class="mdl-card mdl-card_wide mdl mdl-shadow--6dp" style="width: 101%;height: 100%">
-                                    <table class="mdl-data-table mdl-js-data-table " style="width: 101%;height: 100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="mdl-data-table__cell--non-numeric">Nome</th>
-                                                <th class="mdl-data-table__cell--non-numeric">E-mail</th>
-                                                <th class="mdl-data-table__cell--non-numeric">Tipo</th>
-                                                <th class="mdl-data-table__cell--non-numeric">Situação</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="mdl-data-table__cell--non-numeric">Maurílio Machado</td>
-                                                <td class="mdl-data-table__cell--non-numeric">mauriliommachado@gmail.com</td>
-                                                <td class="mdl-data-table__cell--non-numeric">Admin</td>
-                                                <td class="mdl-data-table__cell--non-numeric">Ativo</td>
-                                                <td><button id="btnSelecionar" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"  style="float: right">Selecionar</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mdl-data-table__cell--non-numeric">João Silva</td>
-                                                <td class="mdl-data-table__cell--non-numeric">joaosilva@gmail.com</td>
-                                                <td class="mdl-data-table__cell--non-numeric">Cliente</td>
-                                                <td class="mdl-data-table__cell--non-numeric">Ativo</td>
-                                                <td><button id="btnSelecionar" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"  style="float: right">Selecionar</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mdl-data-table__cell--non-numeric">Maria Silva</td>
-                                                <td class="mdl-data-table__cell--non-numeric">mariasilva@gmail.com</td>
-                                                <td class="mdl-data-table__cell--non-numeric">Cliente</td>
-                                                <td class="mdl-data-table__cell--non-numeric">Inativo</td>
-                                                <td><button id="btnSelecionar" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"  style="float: right">Selecionar</button></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="ativa">
+                                            <span class="mdl-switch__label" id="tst">Ativa</span>
+                                            <input type="checkbox" id="ativa" class="mdl-switch__input" checked>
+                                        </label>
+
+                                    </div>
+                                    <div class="mdl-card__actions mdl-card--border">
+                                        <button type="button" class="close mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect " style="float: right;margin: 2px" onclick="someModel()"><i class="material-icons">&#xE5C9;</i></button>
+                                        <button type="button" id="demo-show-toast" class="close mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" style="float: right;margin: 2px" onclick="gravaPessoa();"><i class="material-icons">check</i></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
-                    <section class="mdl-layout__tab-panel" id="fixed-tab-2">
-                        
-                        <div class="page-content">
-                            <div class="mdl-card  mdl-card_wide mdl mdl-shadow--6dp card-wide">
-                                <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-                                    <h4 class="mdl-card__title-text">Dados Cliente</h4>
-                                </div>
-                                <div class="mdl-card__supporting-text">
-                                    <form action="#">
-                                        <h5>Dados Pessoais</h5>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" value="" id="nome" />
-                                            <label class="mdl-textfield__label" for="nome">Nome</label>
-                                        </div>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" value="" id="email" />
-                                            <label class="mdl-textfield__label" for="email">E-mail</label>
-                                        </div>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="password" value="" id="pwd" />
-                                            <label class="mdl-textfield__label" for="pwd">Senha</label>
-                                        </div>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
-                                                <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="1" checked>
-                                                <span class="mdl-radio__label">Admin</span>
+                        <button style="z-index: 3;bottom: 30px;right: 30px;float: right;position: fixed" id="show-dialog" class="mdl-button mdl-shadow--6dp mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" type="reset">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </form>
+                    <div style="width: 100%;overflow: auto">
+
+                        <table class="mdl-data-table mdl-js-data-table " id="tbFiliais" style="width: 100%;height: 100%;">
+                            <thead>
+                                <tr>
+                                    <th class="mdl-data-table__cell--non-numeric">Nome</th>
+                                    <th class="mdl-data-table__cell--non-numeric">E-mail</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Tipo</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Situação</th>
+                                    <th>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                                            <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
+                                                <i class="material-icons">search</i>
                                             </label>
-                                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
-                                                <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="2">
-                                                <span class="mdl-radio__label">Cliente</span>
-                                            </label>
+                                            <div class="mdl-textfield__expandable-holder">
+                                                <input class="mdl-textfield__input" type="text" id="sample6" onkeyup="DigitaFiltro('tbFiliais', 'sample6')">
+                                                <label class="mdl-textfield__label" for="sample-expandable">Filtrar</label>
+                                            </div>
                                         </div>
-                                        <br>
-                                        <h5>Endereço</h5>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" value="" id="cep" maxlength="9" pattern= "\d{5}-?\d{3}" />
-                                            <label class="mdl-textfield__label" for="cep">CEP</label>
-                                        </div>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" value="" id="rua" />
-                                            <label class="mdl-textfield__label" for="rua">Logradouro</label>
-                                        </div>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" value="" id="bairro"  />
-                                            <label class="mdl-textfield__label" for="bairro">Bairro</label>
-                                        </div>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" value="" id="cidade"  />
-                                            <label class="mdl-textfield__label" for="cidade">Cidade</label>
-                                        </div>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" value="" id="uf"  />
-                                            <label class="mdl-textfield__label" for="uf">Estado</label>
-                                        </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                                        <br>
-                                        <h5>Situação</h5>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
-                                                <span class="mdl-switch__label">Ativo</span>
-                                                <input type="checkbox" id="switch-1" class="mdl-switch__input" checked>
-                                            </label>
-                                        </div>
-
-
-                                    </form>
-                                </div>
-                                <div class="mdl-card__actions mdl-card--border">
-                                    <button id="demo-show-toast" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" >Salvar</button>
-                                </div>
-
-                            </div>
-                        </div>
-                        
-                        
-                    </section>
-
-                    <!-- Toast-->
                 </div>
-            </main>
                 <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
                     <div class="mdl-snackbar__text"></div>
                     <button class="mdl-snackbar__action" type="button"></button>                       
                 </div>
+
+            </main>
         </div>
-</body>
+    </body>
 </html>
