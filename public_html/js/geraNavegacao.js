@@ -7,7 +7,7 @@
 
 function geraNavegacao() {
     $('#navegador').html('<a class="mdl-navigation__link" href="principal.html">Home</a>\n\
-<a class="mdl-navigation__link" href="cliente.html">Manter Clientes</a>\n\
+<a class="mdl-navigation__link" href="cliente.html">Manter Pessoas</a>\n\
 <a class="mdl-navigation__link" href="produtos.html">Manter Produtos</a>\n\
 <a class="mdl-navigation__link" href="pedidos.html">Manter Pedidos</a>\n\
 <a class="mdl-navigation__link" href="filial.html">Manter Filiais</a>\n\

@@ -102,11 +102,14 @@ function preencheCampos(response) {
                     }
                     if (v.proUrlImagem != "") {
                         $("#proUrlImagem").parent().addClass("is-dirty");
+                        $('#imagem').css('visibility', 'visible');
+                        $('#imagem').attr("src", v.proUrlImagem);
                     } else {
                         $("#proUrlImagem").parent().removeClass("is-invalid");
                         $("#proUrlImagem").parent().removeClass("is-dirty");
                     }
                     $('#proUrlImagem').val(v.proUrlImagem);
+
                     $('#proPrecoVenda').val(v.proPrecoVenda);
                     $('#cmbCategorias').val(v.codCategoria.codCategoria);
                     $('#cmbMarca').val(v.codMarca.codMarca);
@@ -139,10 +142,9 @@ function btnSeleciona() {
 
 function validaCampos() {
     var retorno = true;
-//    retorno = campoObrigatorio($("#pesNome"));
-//    retorno = campoObrigatorio($("#tipo"));
-//    retorno = campoObrigatorio($("#cpf"));
-//    retorno = campoObrigatorio($("#pesEmail"));
+    retorno = campoObrigatorio($("#proDescricao"));
+    retorno = campoObrigatorio($("#proReferencia"));
+    retorno = campoObrigatorio($("#proPrecoVenda"));
     return retorno;
 }
 

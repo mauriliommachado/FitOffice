@@ -87,10 +87,10 @@ function preencheCampos(response) {
                         $("#cpf").parent().removeClass("is-dirty");
                     }
                     if (v.Cod_Tipo_Pessoa != "") {
-                        $("#tipo").parent().addClass("is-dirty");
+                        $("#cmbTipo").parent().addClass("is-dirty");
                     } else {
-                        $("#tipo").parent().removeClass("is-invalid");
-                        $("#tipo").parent().removeClass("is-dirty");
+                        $("#cmbTipo").parent().removeClass("is-invalid");
+                        $("#cmbTipo").parent().removeClass("is-dirty");
                     }
                     if (v.pesEmail != "") {
                         $("#pesEmail").parent().addClass("is-dirty");
@@ -112,7 +112,7 @@ function preencheCampos(response) {
                     }
                     $('#pesNome').val(v.pesNome);
                     $('#id').val(v.codPessoa);
-                    $('#tipo').val(v.codTipoPessoa.toString());
+                    $('#cmbTipo').val(v.codTipoPessoa);
                     $('#cpf').val(cpfCnpj(v.pesCPF));
                     $('#pesEmail').val(v.pesEmail);
                     $('#pesFisica').val(v.pesFisica);
@@ -146,7 +146,7 @@ function btnSeleciona() {
 function validaCampos() {
     var retorno = true;
     retorno = campoObrigatorio($("#pesNome"));
-    retorno = campoObrigatorio($("#tipo"));
+    retorno = campoObrigatorio($("#cmbTipo"));
     retorno = campoObrigatorio($("#cpf"));
     retorno = campoObrigatorio($("#pesEmail"));
     return retorno;
@@ -190,7 +190,7 @@ function formToJSON() {
     return JSON.stringify({
         "pesAtivo": true,
         "codPessoa": $('#id').val() == "" ? 0 : $('#id').val(),
-        "codTipoPessoa": $('#tipo').val(),
+        "codTipoPessoa": $('#cmbTipo').val(),
         "pesCPF": $('#cpf').val().replaceCustom(".","").replaceCustom("-",""),
         "pesDtCadastro": $("#pesDtCadastro").val(),
         "pesEmail": $("#pesEmail").val(),
