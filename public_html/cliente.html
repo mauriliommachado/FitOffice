@@ -21,6 +21,7 @@ and open the template in the editor.
         <script src="js/jquery.mask.min.js"></script>
         <script src="js/dialog-polyfill.js"></script>
         <script src="js/showToast.js"></script>
+        <script src="js/ajax.custom.js"></script>
         <script src="js/pessoa.js"></script>
         <script src="js/geraNavegacao.js"></script>
         <link rel="stylesheet" href="css/dialog-polyfill.css">
@@ -31,6 +32,7 @@ and open the template in the editor.
                 preparaModel(buscaPessoaPorEmpresa, ZeraIdPessoa);
                 $("#cpf").mask("###.###.###-##");
                 $("#endCep").mask("##.###-###");
+                $("#tabPes").click();
             });
 
         </script>
@@ -88,7 +90,7 @@ and open the template in the editor.
                                     </div>
                                     <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
                                         <div class="mdl-tabs__tab-bar">
-                                            <a href="#Pessoa" class="mdl-tabs__tab is-active">Pessoa</a>
+                                            <a href="#Pessoa" id="tabPes" class="mdl-tabs__tab is-active">Pessoa</a>
                                             <a href="#Endereco" class="mdl-tabs__tab">Endereço</a>
                                         </div>
 

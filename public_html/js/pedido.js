@@ -5,22 +5,18 @@
  */
 var idFilial = 1;
 var idPedido = 0;
-function buscaPedidoPorFilial() {
 
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServicePedido/busca");
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            preencheCampos(client.responseText);
-            preencheLista(client.responseText, false);
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+function buscaPedidoPorFilial() {
+    chamadaWs("ServicePedido/busca", "GET", null, retornoBuscaPedido);
+}
+
+function retornoBuscaPedido(client) {
+    if (client.responseText === "") {
+        return;
+    }
+    preencheCampos(client.responseText);
+    preencheLista(client.responseText, false);
+    $('#spinner').removeClass('is-active');
 }
 
 function deletaPedido() {
@@ -28,28 +24,24 @@ function deletaPedido() {
         someModel();
         return;
     }
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServicePedido/delete/" + idPedido);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            idPedido = 0;
-            if (Boolean(client.responseText) == true) {
-                var snackbarContainer = document.querySelector('#demo-toast-example');
-                'use strict';
-                var data = {message: 'Deletado com Sucesso!'};
-                snackbarContainer.MaterialSnackbar.showSnackbar(data);
-            }
-            someModel();
+    chamadaWs("ServicePedido/delete/" + idPedido,"GET",null,retornaDeletaPedido)
+}
 
-            buscaPedidoPorFilial();
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+function retornaDeletaPedido(client) {
+    if (client.responseText === "") {
+        return;
+    }
+    idPedido = 0;
+    if (Boolean(client.responseText) == true) {
+        var snackbarContainer = document.querySelector('#demo-toast-example');
+        'use strict';
+        var data = {message: 'Deletado com Sucesso!'};
+        snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    }
+    someModel();
+
+    buscaPedidoPorFilial();
+    $('#spinner').removeClass('is-active');
 }
 
 function btnGravar() {
@@ -143,23 +135,18 @@ function gravaPedido() {
         return;
     }
     someModel();
-    var client = new XMLHttpRequest();
-    client.open("PUT", url+"ServicePedido/grava");
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            preencheCampos(client.responseText);
-            var snackbarContainer = document.querySelector('#demo-toast-example');
-            'use strict';
-            var data = {message: 'Salvo com Sucesso!'};
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    chamadaWs("ServicePedido/grava", "PUT", formToJSON(), retornoPedido);
+}
 
-            idPedido = 0;
-            buscaPedidoPorFilial();
-        }
-    };
-    var json = formToJSON();
-    client.send(json);
+function retornoPedido(client) {
+    preencheCampos(client.responseText);
+    var snackbarContainer = document.querySelector('#demo-toast-example');
+    'use strict';
+    var data = {message: 'Salvo com Sucesso!'};
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+    idPedido = 0;
+    buscaPedidoPorFilial();
 }
 
 String.prototype.replaceCustom = function (de, para) {

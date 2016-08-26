@@ -5,20 +5,14 @@
  */
 
 var id = 1;
-var url = window.sessionStorage.getItem('baseUrl');
 
 function buscaEmpresa() {
-    
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServiceEmpresa/busca/"+id);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            preencheCampos(client.responseText);
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+    chamadaWs("ServiceEmpresa/busca/" + id, "GET", null, funcaoRetornoBusca);
+}
+
+function funcaoRetornoBusca(resposta) {
+    preencheCampos(resposta.responseText);
+    $('#spinner').removeClass('is-active');
 }
 
 function preencheCampos(response) {
@@ -38,21 +32,16 @@ function preencheCampos(response) {
     });
 }
 
+function funcaoRetornoGrava(resposta) {
+    preencheCampos(resposta.responseText);
+    var snackbarContainer = document.querySelector('#demo-toast-example');
+    'use strict';
+    var data = {message: 'Salvo com Sucesso!'};
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+}
 
 function gravaEmpresa() {
-    var client = new XMLHttpRequest();
-    client.open("PUT", url+"ServiceEmpresa/grava/");
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            preencheCampos(client.responseText);
-            var snackbarContainer = document.querySelector('#demo-toast-example');
-            'use strict';
-            var data = {message: 'Salvo com Sucesso!'};
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
-        }
-    };
-    client.send(formToJSON());
+    chamadaWs("ServiceEmpresa/grava/", "PUT", formToJSON(), funcaoRetornoGrava);
 }
 
 String.prototype.replaceCustom = function (de, para) {
@@ -67,7 +56,7 @@ String.prototype.replaceCustom = function (de, para) {
 
 function formToJSON() {
     return JSON.stringify({
-        codEmpresa: $('#id').val()==""?0:$('#id').val(),
+        codEmpresa: $('#id').val() == "" ? 0 : $('#id').val(),
         "empCNPJ": $('#cnpj').val().replaceCustom(".", "").replaceCustom("/", "").replaceCustom("-", "")
     });
 }

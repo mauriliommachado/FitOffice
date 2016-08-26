@@ -7,21 +7,13 @@ var id = 1;
 var idPessoa = 0;
 var url = window.sessionStorage.getItem('baseUrl');
 function buscaPessoaPorEmpresa() {
+    chamadaWs("ServicePessoa/buscaPorEmpresa/" + id, "GET", null, retornoBusca);
+}
 
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServicePessoa/buscaPorEmpresa/"+id);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            preencheCampos(client.responseText);
-            preencheLista(client.responseText, false);
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+function retornoBusca(client) {
+    preencheCampos(client.responseText);
+    preencheLista(client.responseText, false);
+    $('#spinner').removeClass('is-active');
 }
 
 function deletaFilial() {
@@ -29,28 +21,21 @@ function deletaFilial() {
         someModel();
         return;
     }
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServicePessoa/delete/" + idPessoa);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            idPessoa = 0;
-            if (Boolean(client.responseText) == true) {
-                var snackbarContainer = document.querySelector('#demo-toast-example');
-                'use strict';
-                var data = {message: 'Deletado com Sucesso!'};
-                snackbarContainer.MaterialSnackbar.showSnackbar(data);
-            }
-            someModel();
+    chamadaWs("ServicePessoa/delete/" + idPessoa, "GET", null, retornoDeletaFilial);
+}
 
-            buscaPessoaPorEmpresa();
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+function retornoDeletaFilial(client) {
+    idPessoa = 0;
+    if (Boolean(client.responseText) == true) {
+        var snackbarContainer = document.querySelector('#demo-toast-example');
+        'use strict';
+        var data = {message: 'Deletado com Sucesso!'};
+        snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    }
+    someModel();
+
+    buscaPessoaPorEmpresa();
+    $('#spinner').removeClass('is-active');
 }
 
 function btnGravar() {
@@ -158,23 +143,18 @@ function gravaPessoa() {
         return;
     }
     someModel();
-    var client = new XMLHttpRequest();
-    client.open("PUT", url+"ServicePessoa/grava");
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            preencheCampos(client.responseText);
-            var snackbarContainer = document.querySelector('#demo-toast-example');
-            'use strict';
-            var data = {message: 'Salvo com Sucesso!'};
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    chamadaWs("ServicePessoa/grava", "PUT", formToJSON(), retornoGravaPessoa)
+}
 
-            idPessoa = 0;
-            buscaPessoaPorEmpresa();
-        }
-    };
-    var json = formToJSON();
-    client.send(json);
+function retornoGravaPessoa(client) {
+    preencheCampos(client.responseText);
+    var snackbarContainer = document.querySelector('#demo-toast-example');
+    'use strict';
+    var data = {message: 'Salvo com Sucesso!'};
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+    idPessoa = 0;
+    buscaPessoaPorEmpresa();
 }
 
 String.prototype.replaceCustom = function (de, para) {
@@ -192,7 +172,7 @@ function formToJSON() {
         "pesAtivo": true,
         "codPessoa": $('#id').val() == "" ? 0 : $('#id').val(),
         "codTipoPessoa": $('#cmbTipo').val(),
-        "pesCPF": $('#cpf').val().replaceCustom(".","").replaceCustom("-",""),
+        "pesCPF": $('#cpf').val().replaceCustom(".", "").replaceCustom("-", ""),
         "pesDtCadastro": $("#pesDtCadastro").val(),
         "pesEmail": $("#pesEmail").val(),
         "pesFisica": true,
@@ -203,8 +183,8 @@ function formToJSON() {
     });
 }
 
-function ZeraIdPessoa(){
-    idPessoa=0;
+function ZeraIdPessoa() {
+    idPessoa = 0;
 }
 
 
