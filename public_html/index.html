@@ -28,6 +28,19 @@ and open the template in the editor.
         <script src="js/ajax.custom.js"></script>
         <script src="js/showToast.js"></script>
         <script src="js/geraNavegacao.js"></script>
+        <script>
+            $(document).ready(function () {
+                var host, port;
+                $.getJSON("js/config.json", function (data) {
+                    host = data.host;
+                    port = data.port;
+                    window.sessionStorage.setItem('host', host);
+                    window.sessionStorage.setItem('port', port);
+                    window.sessionStorage.setItem('baseUrl', "http://"+host+":"+port+"/FitFood/webresources/");
+                    
+                });
+            });
+        </script>
     </head>
     <body>
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">

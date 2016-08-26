@@ -5,10 +5,11 @@
  */
 var id = 1;
 var idPessoa = 0;
+var url = window.sessionStorage.getItem('baseUrl');
 function buscaPessoaPorEmpresa() {
 
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServicePessoa/buscaPorEmpresa/"+id);
+    client.open("GET", url+"ServicePessoa/buscaPorEmpresa/"+id);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -29,7 +30,7 @@ function deletaFilial() {
         return;
     }
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServicePessoa/delete/" + idPessoa);
+    client.open("GET", url+"ServicePessoa/delete/" + idPessoa);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -158,7 +159,7 @@ function gravaPessoa() {
     }
     someModel();
     var client = new XMLHttpRequest();
-    client.open("PUT", "http://localhost:9999/FitFood/webresources/ServicePessoa/grava");
+    client.open("PUT", url+"ServicePessoa/grava");
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {

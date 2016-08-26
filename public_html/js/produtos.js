@@ -6,10 +6,11 @@
 var id = 3;
 var idProduto = 0;
 var idEmpresa = 1;
+var url = window.sessionStorage.getItem('baseUrl');
 function buscaProdutoPorFilial() {
 
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceProduto/buscaPorFilial/" + id);
+    client.open("GET", url+"ServiceProduto/buscaPorFilial/" + id);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -30,7 +31,7 @@ function deletaProduto() {
         return;
     }
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceProduto/delete/" + idProduto);
+    client.open("GET", url+"ServiceProduto/delete/" + idProduto);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -154,7 +155,7 @@ function gravaProduto() {
     }
     someModel();
     var client = new XMLHttpRequest();
-    client.open("PUT", "http://localhost:9999/FitFood/webresources/ServiceProduto/grava");
+    client.open("PUT", url+"ServiceProduto/grava");
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -175,7 +176,7 @@ function gravaProduto() {
 
 function gravaMarca() {
     var client = new XMLHttpRequest();
-    client.open("PUT", "http://localhost:9999/FitFood/webresources/ServiceMarca/grava");
+    client.open("PUT", url+"ServiceMarca/grava");
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -195,7 +196,7 @@ function gravaMarca() {
 
 function gravaCategoria() {
     var client = new XMLHttpRequest();
-    client.open("PUT", "http://localhost:9999/FitFood/webresources/ServiceCategoria/grava");
+    client.open("PUT", url+"ServiceCategoria/grava");
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -259,7 +260,7 @@ function ZeraIdProduto() {
 function buscaMarcasPorFilial() {
 
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceMarca/busca", false);
+    client.open("GET", url+"ServiceMarca/busca", false);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -286,7 +287,7 @@ function preencheComboMarcas(json) {
 function buscaCategoriasPorEmpresa() {
 
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceCategoria/busca", false);
+    client.open("GET", url+"ServiceCategoria/busca", false);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {

@@ -8,7 +8,7 @@ var idPedido = 0;
 function buscaPedidoPorFilial() {
 
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServicePedido/busca");
+    client.open("GET", url+"ServicePedido/busca");
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -29,7 +29,7 @@ function deletaPedido() {
         return;
     }
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServicePedido/delete/" + idPedido);
+    client.open("GET", url+"ServicePedido/delete/" + idPedido);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -144,7 +144,7 @@ function gravaPedido() {
     }
     someModel();
     var client = new XMLHttpRequest();
-    client.open("PUT", "http://localhost:9999/FitFood/webresources/ServicePedido/grava");
+    client.open("PUT", url+"ServicePedido/grava");
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {

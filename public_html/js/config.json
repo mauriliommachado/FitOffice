@@ -1,3 +1,4 @@
 {
-    "status": "http://localhost:9999/FitFoodWs/webresources/ServiceLogin"
+    "host": "192.168.0.14",
+    "port": "9999"
 }

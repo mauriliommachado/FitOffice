@@ -5,10 +5,12 @@
  */
 
 var id = 1;
+var url = window.sessionStorage.getItem('baseUrl');
 
 function buscaEmpresa() {
+    
     var client = new XMLHttpRequest();
-    client.open("GET", "http://localhost:9999/FitFood/webresources/ServiceEmpresa/busca/"+id);
+    client.open("GET", url+"ServiceEmpresa/busca/"+id);
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -39,7 +41,7 @@ function preencheCampos(response) {
 
 function gravaEmpresa() {
     var client = new XMLHttpRequest();
-    client.open("PUT", "http://localhost:9999/FitFood/webresources/ServiceEmpresa/grava/");
+    client.open("PUT", url+"ServiceEmpresa/grava/");
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
