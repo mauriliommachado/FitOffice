@@ -8,21 +8,14 @@ var idProduto = 0;
 var idEmpresa = 1;
 var url = window.sessionStorage.getItem('baseUrl');
 function buscaProdutoPorFilial() {
+    chamadaWs("ServiceProduto/buscaPorFilial/" + id, "GET", null, retornoBuscaProduto);
+}
 
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServiceProduto/buscaPorFilial/" + id);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            preencheCampos(client.responseText);
-            preencheLista(client.responseText, false);
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+
+function retornoBuscaProduto(client) {
+    preencheCampos(client.responseText);
+    preencheLista(client.responseText, false);
+    $('#spinner').removeClass('is-active');
 }
 
 function deletaProduto() {
@@ -31,27 +24,22 @@ function deletaProduto() {
         return;
     }
     var client = new XMLHttpRequest();
-    client.open("GET", url+"ServiceProduto/delete/" + idProduto);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            idProduto = 0;
-            if (Boolean(client.responseText) == true) {
-                var snackbarContainer = document.querySelector('#demo-toast-example');
-                'use strict';
-                var data = {message: 'Deletado com Sucesso!'};
-                snackbarContainer.MaterialSnackbar.showSnackbar(data);
-            }
-            someModel();
+    chamadaWs("ServiceProduto/delete/" + idProduto, "GET", null, retornaDeletaProduto);
+    client.open("GET", url + "ServiceProduto/delete/" + idProduto);
+}
 
-            buscaProdutoPorFilial();
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+function retornaDeletaProduto(client) {
+    idProduto = 0;
+    if (Boolean(client.responseText) == true) {
+        var snackbarContainer = document.querySelector('#demo-toast-example');
+        'use strict';
+        var data = {message: 'Deletado com Sucesso!'};
+        snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    }
+    someModel();
+
+    buscaProdutoPorFilial();
+    $('#spinner').removeClass('is-active');
 }
 
 function btnGravar() {
@@ -154,64 +142,49 @@ function gravaProduto() {
         return;
     }
     someModel();
-    var client = new XMLHttpRequest();
-    client.open("PUT", url+"ServiceProduto/grava");
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            preencheCampos(client.responseText);
-            var snackbarContainer = document.querySelector('#demo-toast-example');
-            'use strict';
-            var data = {message: 'Salvo com Sucesso!'};
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    chamadaWs("ServiceProduto/grava", "PUT", formToJSON(), funcaoRetornoGravaProduto);
+}
 
-            idProduto = 0;
-            buscaProdutoPorFilial();
-        }
-    };
-    var json = formToJSON();
-    client.send(json);
+function funcaoRetornoGravaProduto(client) {
+    preencheCampos(client.responseText);
+    var snackbarContainer = document.querySelector('#demo-toast-example');
+    'use strict';
+    var data = {message: 'Salvo com Sucesso!'};
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+    idProduto = 0;
+    buscaProdutoPorFilial();
 }
 
 
 function gravaMarca() {
-    var client = new XMLHttpRequest();
-    client.open("PUT", url+"ServiceMarca/grava");
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            var snackbarContainer = document.querySelector('#demo-toast-example');
-            'use strict';
-            var data = {message: 'Salvo com Sucesso!'};
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    chamadaWs("ServiceMarca/grava", "PUT", formToJSONMarca(), retornoGravaMarca);
+}
 
-            buscaMarcasPorFilial();
-            document.getElementById('myModal2').style.display = 'none';
-            mostraModel()
-        }
-    };
-    var json = formToJSONMarca();
-    client.send(json);
+function  retornoGravaMarca(client) {
+    var snackbarContainer = document.querySelector('#demo-toast-example');
+    'use strict';
+    var data = {message: 'Salvo com Sucesso!'};
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+    buscaMarcasPorFilial();
+    document.getElementById('myModal2').style.display = 'none';
+    mostraModel();
 }
 
 function gravaCategoria() {
-    var client = new XMLHttpRequest();
-    client.open("PUT", url+"ServiceCategoria/grava");
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            var snackbarContainer = document.querySelector('#demo-toast-example');
-            'use strict';
-            var data = {message: 'Salvo com Sucesso!'};
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    chamadaWs("ServiceCategoria/grava", "PUT", formToJSONCategoria(), retornoGravaCategoria);
+}
 
-            buscaCategoriasPorEmpresa();
-            document.getElementById('myModal3').style.display = 'none';
-            mostraModel()
-        }
-    };
-    var json = formToJSONCategoria();
-    client.send(json);
+function retornoGravaCategoria(client) {
+    var snackbarContainer = document.querySelector('#demo-toast-example');
+    'use strict';
+    var data = {message: 'Salvo com Sucesso!'};
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+    buscaCategoriasPorEmpresa();
+    document.getElementById('myModal3').style.display = 'none';
+    mostraModel();
 }
 
 String.prototype.replaceCustom = function (de, para) {
@@ -257,21 +230,15 @@ function ZeraIdProduto() {
     idProduto = 0;
 }
 
+function retornoBuscaMarcas(client) {
+    if (client.responseText === "") {
+        return;
+    }
+    preencheComboMarcas(client.responseText);
+}
+
 function buscaMarcasPorFilial() {
-
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServiceMarca/busca", false);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            preencheComboMarcas(client.responseText);
-
-        }
-    };
-    client.send();
+    chamadaWs("ServiceMarca/busca", "GET", null, retornoBuscaMarcas);
 }
 
 function preencheComboMarcas(json) {
@@ -285,20 +252,14 @@ function preencheComboMarcas(json) {
 }
 
 function buscaCategoriasPorEmpresa() {
+    chamadaWs("ServiceCategoria/busca", "GET", null, retornoBuscaCategorias);
+}
 
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServiceCategoria/busca", false);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            preencheComboCategorias(client.responseText);
-
-        }
-    };
-    client.send();
+function retornoBuscaCategorias(client) {
+    if (client.responseText === "") {
+        return;
+    }
+    preencheComboCategorias(client.responseText);
 }
 
 function preencheComboCategorias(json) {

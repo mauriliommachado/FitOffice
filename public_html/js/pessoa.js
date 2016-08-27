@@ -90,11 +90,52 @@ function preencheCampos(response) {
                         $("#pesFisica").parent().removeClass("is-invalid");
                         $("#pesFisica").parent().removeClass("is-dirty");
                     }
-                    if (v.pesSenha != "") {
-                        $("#pesSenha").parent().addClass("is-dirty");
+                    if (v.codEndereco.endCep != "") {
+                        $("#endCep").parent().addClass("is-dirty");
                     } else {
-                        $("#pesSenha").parent().removeClass("is-invalid");
-                        $("#pesSenha").parent().removeClass("is-dirty");
+                        $("#endCep").parent().removeClass("is-invalid");
+                        $("#endCep").parent().removeClass("is-dirty");
+                    }
+                    if (v.codEndereco.endLogradouro != "") {
+                        $("#endLogradouro").parent().addClass("is-dirty");
+                    } else {
+                        $("#endLogradouro").parent().removeClass("is-invalid");
+                        $("#endLogradouro").parent().removeClass("is-dirty");
+                    }
+                    if (v.codEndereco.endNumero != "") {
+                        $("#endNumero").parent().addClass("is-dirty");
+                    } else {
+                        $("#endNumero").parent().removeClass("is-invalid");
+                        $("#endNumero").parent().removeClass("is-dirty");
+                    }
+                    if (v.codEndereco.endBairro != "") {
+                        $("#endBairro").parent().addClass("is-dirty");
+                    } else {
+                        $("#endBairro").parent().removeClass("is-invalid");
+                        $("#endBairro").parent().removeClass("is-dirty");
+                    }
+                    if (v.codEndereco.endCidade != "") {
+                        $("#endCidade").parent().addClass("is-dirty");
+                    } else {
+                        $("#endCidade").parent().removeClass("is-invalid");
+                        $("#endCidade").parent().removeClass("is-dirty");
+                    }
+                    if (v.codEndereco.endUf != "") {
+                        $("#endUf").parent().addClass("is-dirty");
+                    } else {
+                        $("#endUf").parent().removeClass("is-invalid");
+                        $("#endUf").parent().removeClass("is-dirty");
+                    }
+                    if (v.codEndereco.endComplemento != "") {
+                        $("#endComplemento").parent().addClass("is-dirty");
+                    } else {
+                        $("#endComplemento").parent().removeClass("is-invalid");
+                        $("#endComplemento").parent().removeClass("is-dirty");
+                    }
+                    if (v.pesAtivo == true) {
+                        $("#lblAtiva").addClass("is-checked");
+                    } else {
+                        $("#lblAtiva").removeClass("is-checked");
                     }
                     $('#pesNome').val(v.pesNome);
                     $('#id').val(v.codPessoa);
@@ -103,7 +144,13 @@ function preencheCampos(response) {
                     $('#pesEmail').val(v.pesEmail);
                     $('#pesFisica').val(v.pesFisica);
                     $('#pesSenha').val(v.pesSenha);
-                    $('#pesDtCadastro').val(v.pesDtCadastro);
+                    $('#endComplemento').val(v.codEndereco.endComplemento);
+                    $('#endUf').val(v.pesDtCadastro);
+                    $('#endCidade').val(v.pesDtCadastro);
+                    $('#endBairro').val(v.pesDtCadastro);
+                    $('#endNumero').val(v.pesDtCadastro);
+                    $('#endLogradouro').val(v.pesDtCadastro);
+                    $('#endCep').val(v.pesDtCadastro);
                     return false;
                 }
             }
@@ -169,7 +216,7 @@ String.prototype.replaceCustom = function (de, para) {
 
 function formToJSON() {
     return JSON.stringify({
-        "pesAtivo": true,
+        "pesAtivo": $("#lblAtiva").hasClass("is-checked"),
         "codPessoa": $('#id').val() == "" ? 0 : $('#id').val(),
         "codTipoPessoa": $('#cmbTipo').val(),
         "pesCPF": $('#cpf').val().replaceCustom(".", "").replaceCustom("-", ""),
@@ -179,7 +226,16 @@ function formToJSON() {
         "pesNome": $("#pesNome").val(),
         "pesSenha": $("#pesSenha").val(),
         "pesSexo": true,
-        "codEmpresa": {"codEmpresa": id}
+        "codEmpresa": {"codEmpresa": id},
+        "codEndereco": {"codEndereco": $("#pesSenha").val(),
+            "endCep": $("#endCep").val(),
+            "endLogradouro": $("#endLogradouro").val(),
+            "endNumero": $("#endNumero").val(),
+            "endBairro": $("#endBairro").val(),
+            "endCidade": $("#endCidade").val(),
+            "endUf": $("#endUf").val(),
+            "endComplemento": $("#endComplemento").val()
+        }
     });
 }
 
