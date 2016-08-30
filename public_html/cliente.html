@@ -152,6 +152,9 @@ and open the template in the editor.
                                                 </button>
                                             </div>
                                             <div class="mdl-card__supporting-text">
+
+                                                <input class="mdl-textfield__input"  type="text" maxlength="10" value="" id="codEndereco" style="visibility: collapse"/>
+
                                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                                     <input class="mdl-textfield__input"  type="text" maxlength="10" value="" id="endCep" pattern="(^\d{2}\.\d{3}\-\d{3}$)"/>
                                                     <label class="mdl-textfield__label"  for="endCep">CEP</label>
@@ -173,17 +176,17 @@ and open the template in the editor.
                                                     <label class="mdl-textfield__label"  for="endCidade">Cidade</label>
                                                 </div>
                                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                                    <input class="mdl-textfield__input"  type="text" maxlength="60" value="" id="endUf" />
+                                                    <input class="mdl-textfield__input"  type="text" maxlength="2" id="endUf" />
                                                     <label class="mdl-textfield__label"  for="endUf">UF</label>
                                                 </div>
                                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                                     <input class="mdl-textfield__input"  type="text" maxlength="60" value="" id="endComplemento" />
                                                     <label class="mdl-textfield__label"  for="endComplemento">Complemento</label>
                                                 </div>
-<!--                                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="endPadrao">
-                                                    <span class="mdl-switch__label" id="endPadraoLbl">Ativa</span>
-                                                    <input type="checkbox" id="endPadrao" class="mdl-switch__input" checked>
-                                                </label>-->
+                                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                                    <input class="mdl-textfield__input"  type="text" maxlength="60" value="" id="endReferencia" />
+                                                    <label class="mdl-textfield__label"  for="endReferencia">Referencia</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -208,17 +211,17 @@ and open the template in the editor.
                                     <th class="mdl-data-table__cell--non-numeric">Tipo</th>
                                     <th class="mdl-data-table__cell--non-numeric">Situação</th>
                                     <th>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-                                            <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
-                                                <i class="material-icons">search</i>
-                                            </label>
-                                            <div class="mdl-textfield__expandable-holder">
-                                                <input class="mdl-textfield__input" type="text" id="sample6" onkeyup="DigitaFiltro('tbFiliais', 'sample6')">
-                                                <label class="mdl-textfield__label" for="sample-expandable">Filtrar</label>
-                                            </div>
-                                        </div>
-                                    </th>
-                                </tr>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                                <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
+                                    <i class="material-icons">search</i>
+                                </label>
+                                <div class="mdl-textfield__expandable-holder">
+                                    <input class="mdl-textfield__input" type="text" id="sample6" onkeyup="DigitaFiltro('tbFiliais', 'sample6')">
+                                    <label class="mdl-textfield__label" for="sample-expandable">Filtrar</label>
+                                </div>
+                            </div>
+                            </th>
+                            </tr>
                             </thead>
                             <tbody>
 

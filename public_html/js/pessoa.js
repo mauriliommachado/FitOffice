@@ -84,58 +84,76 @@ function preencheCampos(response) {
                         $("#pesEmail").parent().removeClass("is-invalid");
                         $("#pesEmail").parent().removeClass("is-dirty");
                     }
+                    if (v.pesEmail != "") {
+                        $("#pesSenha").parent().addClass("is-dirty");
+                    } else {
+                        $("#pesSenha").parent().removeClass("is-invalid");
+                        $("#pesSenha").parent().removeClass("is-dirty");
+                    }
                     if (v.pesFisica != "") {
                         $("#pesFisica").parent().addClass("is-dirty");
                     } else {
                         $("#pesFisica").parent().removeClass("is-invalid");
                         $("#pesFisica").parent().removeClass("is-dirty");
                     }
-                    if (v.codEndereco.endCep != "") {
-                        $("#endCep").parent().addClass("is-dirty");
-                    } else {
-                        $("#endCep").parent().removeClass("is-invalid");
-                        $("#endCep").parent().removeClass("is-dirty");
-                    }
-                    if (v.codEndereco.endLogradouro != "") {
-                        $("#endLogradouro").parent().addClass("is-dirty");
-                    } else {
-                        $("#endLogradouro").parent().removeClass("is-invalid");
-                        $("#endLogradouro").parent().removeClass("is-dirty");
-                    }
-                    if (v.codEndereco.endNumero != "") {
-                        $("#endNumero").parent().addClass("is-dirty");
-                    } else {
-                        $("#endNumero").parent().removeClass("is-invalid");
-                        $("#endNumero").parent().removeClass("is-dirty");
-                    }
-                    if (v.codEndereco.endBairro != "") {
-                        $("#endBairro").parent().addClass("is-dirty");
-                    } else {
-                        $("#endBairro").parent().removeClass("is-invalid");
-                        $("#endBairro").parent().removeClass("is-dirty");
-                    }
-                    if (v.codEndereco.endCidade != "") {
-                        $("#endCidade").parent().addClass("is-dirty");
-                    } else {
-                        $("#endCidade").parent().removeClass("is-invalid");
-                        $("#endCidade").parent().removeClass("is-dirty");
-                    }
-                    if (v.codEndereco.endUf != "") {
-                        $("#endUf").parent().addClass("is-dirty");
-                    } else {
-                        $("#endUf").parent().removeClass("is-invalid");
-                        $("#endUf").parent().removeClass("is-dirty");
-                    }
-                    if (v.codEndereco.endComplemento != "") {
-                        $("#endComplemento").parent().addClass("is-dirty");
-                    } else {
-                        $("#endComplemento").parent().removeClass("is-invalid");
-                        $("#endComplemento").parent().removeClass("is-dirty");
-                    }
                     if (v.pesAtivo == true) {
                         $("#lblAtiva").addClass("is-checked");
                     } else {
                         $("#lblAtiva").removeClass("is-checked");
+                    }
+                    $("#endCep").parent().removeClass("is-invalid");
+                    $("#endCep").parent().removeClass("is-dirty");
+                    $("#endLogradouro").parent().removeClass("is-invalid");
+                    $("#endLogradouro").parent().removeClass("is-dirty");
+                    $("#endNumero").parent().removeClass("is-invalid");
+                    $("#endNumero").parent().removeClass("is-dirty");
+                    $("#endBairro").parent().removeClass("is-invalid");
+                    $("#endBairro").parent().removeClass("is-dirty");
+                    $("#endCidade").parent().removeClass("is-invalid");
+                    $("#endCidade").parent().removeClass("is-dirty");
+                    $("#endUf").parent().removeClass("is-invalid");
+                    $("#endUf").parent().removeClass("is-dirty");
+                    $("#endComplemento").parent().removeClass("is-invalid");
+                    $("#endComplemento").parent().removeClass("is-dirty");
+                    if (v.enderecoList.length > 0) {
+                        if (v.enderecoList[0].endCep != "") {
+                            $("#endCep").parent().addClass("is-dirty");
+                        }
+                        if (v.enderecoList[0].endLogradouro != "") {
+                            $("#endLogradouro").parent().addClass("is-dirty");
+                        }
+                        if (v.enderecoList[0].endNumero != "") {
+                            $("#endNumero").parent().addClass("is-dirty");
+                        }
+                        if (v.enderecoList[0].endBairro != "") {
+                            $("#endBairro").parent().addClass("is-dirty");
+                        }
+                        if (v.enderecoList[0].endCidade != "") {
+                            $("#endCidade").parent().addClass("is-dirty");
+                        }
+                        if (v.enderecoList[0].endUf != "") {
+                            $("#endUf").parent().addClass("is-dirty");
+                        }
+                        if (v.enderecoList[0].endComplemento != "") {
+                            $("#endComplemento").parent().addClass("is-dirty");
+                        }
+                        $('#endComplemento').val(v.enderecoList[0].endComplemento == null ? "" : v.enderecoList[0].endComplemento);
+                        $('#codEndereco').val(v.enderecoList[0].codEndereco);
+                        $('#endUf').val(v.enderecoList[0].endUF);
+                        $('#endCidade').val(v.enderecoList[0].endCidade);
+                        $('#endBairro').val(v.enderecoList[0].endBairro);
+                        $('#endNumero').val(v.enderecoList[0].endNumero);
+                        $('#endLogradouro').val(v.enderecoList[0].endLogradouro);
+                        $('#endCep').val(v.enderecoList[0].endCep);
+                    }else{
+                        $('#endComplemento').val("");
+                        $('#codEndereco').val("");
+                        $('#endUf').val("");
+                        $('#endCidade').val("");
+                        $('#endBairro').val("");
+                        $('#endNumero').val("");
+                        $('#endLogradouro').val("");
+                        $('#endCep').val("");
                     }
                     $('#pesNome').val(v.pesNome);
                     $('#id').val(v.codPessoa);
@@ -144,13 +162,7 @@ function preencheCampos(response) {
                     $('#pesEmail').val(v.pesEmail);
                     $('#pesFisica').val(v.pesFisica);
                     $('#pesSenha').val(v.pesSenha);
-                    $('#endComplemento').val(v.codEndereco.endComplemento);
-                    $('#endUf').val(v.pesDtCadastro);
-                    $('#endCidade').val(v.pesDtCadastro);
-                    $('#endBairro').val(v.pesDtCadastro);
-                    $('#endNumero').val(v.pesDtCadastro);
-                    $('#endLogradouro').val(v.pesDtCadastro);
-                    $('#endCep').val(v.pesDtCadastro);
+
                     return false;
                 }
             }
@@ -227,15 +239,16 @@ function formToJSON() {
         "pesSenha": $("#pesSenha").val(),
         "pesSexo": true,
         "codEmpresa": {"codEmpresa": id},
-        "codEndereco": {"codEndereco": $("#pesSenha").val(),
-            "endCep": $("#endCep").val(),
-            "endLogradouro": $("#endLogradouro").val(),
-            "endNumero": $("#endNumero").val(),
-            "endBairro": $("#endBairro").val(),
-            "endCidade": $("#endCidade").val(),
-            "endUf": $("#endUf").val(),
-            "endComplemento": $("#endComplemento").val()
-        }
+        "enderecoList": [{"codEndereco": $("#codEndereco").val()== "" ? 0 : $('#codEndereco').val(),
+                "endCep": $("#endCep").val(),
+                "endLogradouro": $("#endLogradouro").val(),
+                "endNumero": $("#endNumero").val(),
+                "endBairro": $("#endBairro").val(),
+                "endCidade": $("#endCidade").val(),
+                "endUF": $("#endUf").val(),
+                "endReferencia": $("#endReferencia").val(),
+                "endComplemento": $("#endComplemento").val()
+            }]
     });
 }
 
