@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var idFilial = 1;
 var idPedido = 0;
+var idProds = new Array();
 
 function buscaPedidoPorFilial() {
-    chamadaWs("ServicePedido/busca", "GET", null, retornoBuscaPedido);
+    chamadaWs("ServicePedido/buscaPorFilial/"+getFilialAtiva(), "GET", null, retornoBuscaPedido);
 }
 
 function retornoBuscaPedido(client) {
     if (client.responseText === "") {
         return;
     }
+
     preencheCampos(client.responseText);
     preencheLista(client.responseText, false);
     $('#spinner').removeClass('is-active');
@@ -24,7 +25,7 @@ function deletaPedido() {
         someModel();
         return;
     }
-    chamadaWs("ServicePedido/delete/" + idPedido,"GET",null,retornaDeletaPedido)
+    chamadaWs("ServicePedido/delete/" + idPedido, "GET", null, retornaDeletaPedido)
 }
 
 function retornaDeletaPedido(client) {
@@ -59,34 +60,48 @@ function preencheCampos(response) {
         $(resposta).each(function (i, v) {
             if (idPedido != 0) {
                 if (idPedido == v.codPedido) {
+                    $("#tbProdutos tbody").html('');
+                    for (var i = 0; i < v.produtoList.length; i++) {
+                        idProds.push(v.produtoList[i].codProduto);
+                    }
+                    var template = $('#templateProduto').html();
+                    var info = Mustache.render(template, v);
+                    $('#tbProdutos tbody').append(info);
+                    if (v.codPedido != "") {
+                        $("#id").parent().addClass("is-dirty");
+                    } else {
+                        $("#id").parent().removeClass("is-invalid");
+                        $("#id").parent().removeClass("is-dirty");
+                    }
+                    $('#id').val(v.codPedido);
                     if (v.codTipoPedido != "") {
                         $("#codTipoPedido").parent().addClass("is-dirty");
                     } else {
                         $("#codTipoPedido").parent().removeClass("is-invalid");
                         $("#codTipoPedido").parent().removeClass("is-dirty");
                     }
-                    $('#codTipoPedido').val(v.pesNome);
+                    $('#codTipoPedido').val(v.codTipoPedido);
                     if (v.pedDtBaixa != "") {
                         $("#pedDtBaixa").parent().addClass("is-dirty");
                     } else {
                         $("#pedDtBaixa").parent().removeClass("is-invalid");
                         $("#pedDtBaixa").parent().removeClass("is-dirty");
                     }
-                    $('#pedDtBaixa').val(v.pesNome);
+                    $('#pedDtBaixa').val(v.pedDtBaixa);
                     if (v.pedDtRealizacao != "") {
                         $("#pedDtRealizacao").parent().addClass("is-dirty");
                     } else {
                         $("#pedDtRealizacao").parent().removeClass("is-invalid");
                         $("#pedDtRealizacao").parent().removeClass("is-dirty");
                     }
-                    $('#pedDtRealizacao').val(v.pesNome);
+                    $('#pedDtRealizacao').val(v.pedDtRealizacao);
                     if (v.pedStatus != "") {
                         $("#pedStatus").parent().addClass("is-dirty");
                     } else {
                         $("#pedStatus").parent().removeClass("is-invalid");
                         $("#pedStatus").parent().removeClass("is-dirty");
                     }
-                    $('#pedStatus').val(v.pesNome);
+                    $('#pedStatus').val(v.pedStatus);
 
                     return false;
                 }
@@ -99,8 +114,20 @@ function preencheCampos(response) {
 
 Mustache.Formatters = {
     date: function (str) {
-        var dt = new Date(parseInt(str.substr(6, str.length - 8), 10));
+        var dt = new Date(str);
         return (dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear());
+    },
+    status: function (str) {
+        if (str == "1") {
+            return "Aguardando aprovação";
+        } else if (str == "2") {
+            return "Em processamento";
+        } else {
+            return "Status desconhecido";
+        }
+    },
+    valor: function (str) {
+        return " R$" + str.toFixed(2);
     }
 };
 
@@ -161,14 +188,21 @@ String.prototype.replaceCustom = function (de, para) {
 
 function formToJSON() {
     return JSON.stringify(
-            {"codPedido": 1,
-                "codTipoPedido": 1,
-                "pedDtBaixa": "Aug 23, 2016 9:18:08 PM",
-                "pedDtRealizacao": "Aug 23, 2016 9:18:11 PM",
-                "pedStatus": 1,
-                "produtoList": [],
-                codFilial: {"codFilial": idFilial}
+            {"codPedido": $('#id').val() == "" ? 0 : $('#id').val(),
+                "codTipoPedido": $('#codTipoPedido').val(),
+                "pedDtRealizacao": $('#pedDtRealizacao').val(),
+                "pedStatus": $('#pedStatus').val(),
+                "codFilial": {"codFilial": getFilialAtiva()},
+                produtoList: returnJsonProdutos()
             });
+}
+
+function returnJsonProdutos() {
+    var retorno = new Array();
+    for (var i = 0; i < idProds.length; i++) {
+        retorno.push({"codProduto": idProds[i]});
+    }
+    return retorno;
 }
 
 function ZeraIdPedido() {

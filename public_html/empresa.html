@@ -17,6 +17,7 @@ and open the template in the editor.
         <script src="js/showToast.js"></script>
         <script src="js/ajax.custom.js"></script>
         <script src="js/empresa.js"></script>
+        <script src="js/util.js"></script>
         <script src="js/geraNavegacao.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
@@ -38,7 +39,16 @@ and open the template in the editor.
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <!-- Navigation. We hide it in small screens. -->
+                    <nav class="mdl-navigation">
+                        <button id="demo-menu-lower-right"
+                                class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">more_vert</i>
+                        </button>
 
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="demo-menu-lower-right" id="listaDeFiliais">
+                        </ul>
+                    </nav>
                 </div>
             </header>
             <div class="mdl-layout__drawer">

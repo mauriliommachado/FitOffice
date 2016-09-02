@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var id = 1;
 var idFilial = 0;
 var url = window.sessionStorage.getItem('baseUrl');
 function buscaFilialPorEmpresa() {
 
     var client = new XMLHttpRequest();
-    client.open("GET", url+"ServiceFilial/buscaPorEmpresa/" + id);
+    client.open("GET", url+"ServiceFilial/buscaPorEmpresa/" + getEmpresaAtiva());
     client.onreadystatechange = function () {
         if (client.readyState == 4 && client.status == 200)
         {
@@ -207,7 +206,7 @@ function formToJSON() {
         "filNomeFantasia": $("#nomeFantasia").val(),
         "filIE": $('#inscricaoEstadual').val(),
         "filCNPJ": $("#cnpj").val().replaceCustom(".", "").replaceCustom("/", "").replaceCustom("-", ""),
-        "codEmpresa": {"codEmpresa": id}
+        "codEmpresa": {"codEmpresa": getEmpresaAtiva()}
     });
 }
 

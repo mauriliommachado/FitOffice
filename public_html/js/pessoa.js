@@ -3,11 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var id = 1;
 var idPessoa = 0;
-var url = window.sessionStorage.getItem('baseUrl');
 function buscaPessoaPorEmpresa() {
-    chamadaWs("ServicePessoa/buscaPorEmpresa/" + id, "GET", null, retornoBusca);
+    chamadaWs("ServicePessoa/buscaPorEmpresa/" + getEmpresaAtiva(), "GET", null, retornoBusca);
 }
 
 function retornoBusca(client) {
@@ -54,6 +52,7 @@ function preencheCampos(response) {
             $("#pesDtCadastro").parent().addClass("is-dirty");
             if (idPessoa != 0) {
                 if (idPessoa == v.codPessoa) {
+                    resetForm();
                     if (v.pesNome != "") {
                         $("#pesNome").parent().addClass("is-dirty");
                     } else {
@@ -96,25 +95,17 @@ function preencheCampos(response) {
                         $("#pesFisica").parent().removeClass("is-invalid");
                         $("#pesFisica").parent().removeClass("is-dirty");
                     }
+                    if (v.pesDtCadastro != "") {
+                        $("#pesDtCadastro").parent().addClass("is-dirty");
+                    } else {
+                        $("#pesDtCadastro").parent().removeClass("is-invalid");
+                        $("#pesDtCadastro").parent().removeClass("is-dirty");
+                    }
                     if (v.pesAtivo == true) {
                         $("#lblAtiva").addClass("is-checked");
                     } else {
                         $("#lblAtiva").removeClass("is-checked");
                     }
-                    $("#endCep").parent().removeClass("is-invalid");
-                    $("#endCep").parent().removeClass("is-dirty");
-                    $("#endLogradouro").parent().removeClass("is-invalid");
-                    $("#endLogradouro").parent().removeClass("is-dirty");
-                    $("#endNumero").parent().removeClass("is-invalid");
-                    $("#endNumero").parent().removeClass("is-dirty");
-                    $("#endBairro").parent().removeClass("is-invalid");
-                    $("#endBairro").parent().removeClass("is-dirty");
-                    $("#endCidade").parent().removeClass("is-invalid");
-                    $("#endCidade").parent().removeClass("is-dirty");
-                    $("#endUf").parent().removeClass("is-invalid");
-                    $("#endUf").parent().removeClass("is-dirty");
-                    $("#endComplemento").parent().removeClass("is-invalid");
-                    $("#endComplemento").parent().removeClass("is-dirty");
                     if (v.enderecoList.length > 0) {
                         if (v.enderecoList[0].endCep != "") {
                             $("#endCep").parent().addClass("is-dirty");
@@ -137,6 +128,9 @@ function preencheCampos(response) {
                         if (v.enderecoList[0].endComplemento != "") {
                             $("#endComplemento").parent().addClass("is-dirty");
                         }
+                        if (v.enderecoList[0].endReferencia != "") {
+                            $("#endReferencia").parent().addClass("is-dirty");
+                        }
                         $('#endComplemento').val(v.enderecoList[0].endComplemento == null ? "" : v.enderecoList[0].endComplemento);
                         $('#codEndereco').val(v.enderecoList[0].codEndereco);
                         $('#endUf').val(v.enderecoList[0].endUF);
@@ -144,8 +138,9 @@ function preencheCampos(response) {
                         $('#endBairro').val(v.enderecoList[0].endBairro);
                         $('#endNumero').val(v.enderecoList[0].endNumero);
                         $('#endLogradouro').val(v.enderecoList[0].endLogradouro);
+                        $('#endReferencia').val(v.enderecoList[0].endReferencia);
                         $('#endCep').val(v.enderecoList[0].endCep);
-                    }else{
+                    } else {
                         $('#endComplemento').val("");
                         $('#codEndereco').val("");
                         $('#endUf').val("");
@@ -154,6 +149,7 @@ function preencheCampos(response) {
                         $('#endNumero').val("");
                         $('#endLogradouro').val("");
                         $('#endCep').val("");
+                        $('#endReferencia').val("");
                     }
                     $('#pesNome').val(v.pesNome);
                     $('#id').val(v.codPessoa);
@@ -162,6 +158,7 @@ function preencheCampos(response) {
                     $('#pesEmail').val(v.pesEmail);
                     $('#pesFisica').val(v.pesFisica);
                     $('#pesSenha').val(v.pesSenha);
+                    $('#pesDtCadastro').val(v.pesDtCadastro);
 
                     return false;
                 }
@@ -169,6 +166,47 @@ function preencheCampos(response) {
         });
     });
 
+}
+
+function resetForm() {
+    $("#pesNome").parent().addClass("is-dirty");
+    $("#pesNome").parent().removeClass("is-invalid");
+    $("#pesNome").parent().removeClass("is-dirty");
+    $("#id").parent().removeClass("is-invalid");
+    $("#id").parent().removeClass("is-dirty");
+    $("#cpf").parent().removeClass("is-invalid");
+    $("#cpf").parent().removeClass("is-dirty");
+    $("#pesEmail").parent().removeClass("is-invalid");
+    $("#pesEmail").parent().removeClass("is-dirty");
+    $("#pesSenha").parent().removeClass("is-invalid");
+    $("#pesSenha").parent().removeClass("is-dirty");
+    $("#pesFisica").parent().removeClass("is-invalid");
+    $("#pesFisica").parent().removeClass("is-dirty");
+    $("#lblAtiva").addClass("is-checked");
+    $('#codEndereco').val("");
+    $("#endCep").parent().removeClass("is-invalid");
+    $("#endCep").parent().removeClass("is-dirty");
+    $("#endLogradouro").parent().removeClass("is-invalid");
+    $("#endLogradouro").parent().removeClass("is-dirty");
+    $("#endNumero").parent().removeClass("is-invalid");
+    $("#endNumero").parent().removeClass("is-dirty");
+    $("#endBairro").parent().removeClass("is-invalid");
+    $("#endBairro").parent().removeClass("is-dirty");
+    $("#endCidade").parent().removeClass("is-invalid");
+    $("#endCidade").parent().removeClass("is-dirty");
+    $("#endUf").parent().removeClass("is-invalid");
+    $("#endUf").parent().removeClass("is-dirty");
+    $("#endComplemento").parent().removeClass("is-invalid");
+    $("#endComplemento").parent().removeClass("is-dirty");
+    $('a.mdl-layout__tab').removeClass('is-active');
+    // activate desired tab
+    $('a[href="#Pessoa"]').addClass('is-active');
+    $('a[href="#Endereco"]').removeClass('is-active');
+    // remove all is-active classes from panels
+    $('.mdl-layout__tab-panel').removeClass('is-active');
+    // activate desired tab panel
+    $('#Pessoa').addClass('is-active');
+    $('#Endereco').removeClass('is-active');
 }
 
 function preencheLista(response, replace) {
@@ -238,14 +276,14 @@ function formToJSON() {
         "pesNome": $("#pesNome").val(),
         "pesSenha": $("#pesSenha").val(),
         "pesSexo": true,
-        "codEmpresa": {"codEmpresa": id},
-        "enderecoList": [{"codEndereco": $("#codEndereco").val()== "" ? 0 : $('#codEndereco').val(),
+        "codEmpresa": {"codEmpresa": getEmpresaAtiva()},
+        "enderecoList": [{"codEndereco": $("#codEndereco").val() == "" ? 0 : $('#codEndereco').val(),
                 "endCep": $("#endCep").val(),
                 "endLogradouro": $("#endLogradouro").val(),
                 "endNumero": $("#endNumero").val(),
                 "endBairro": $("#endBairro").val(),
                 "endCidade": $("#endCidade").val(),
-                "endUF": $("#endUf").val(),
+                "endUF": $("#endUf").val()==""?null:("#endUf").val(),
                 "endReferencia": $("#endReferencia").val(),
                 "endComplemento": $("#endComplemento").val()
             }]

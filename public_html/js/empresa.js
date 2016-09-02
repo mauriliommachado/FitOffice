@@ -4,10 +4,9 @@
  * and open the template in the editor.
  */
 
-var id = 1;
 
 function buscaEmpresa() {
-    chamadaWs("ServiceEmpresa/busca/" + id, "GET", null, funcaoRetornoBusca);
+    chamadaWs("ServiceEmpresa/busca/" + getEmpresaAtiva(), "GET", null, funcaoRetornoBusca);
 }
 
 function funcaoRetornoBusca(resposta) {

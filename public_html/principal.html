@@ -16,6 +16,8 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/app.css"/>
         <script src="js/showToast.js"></script>
         <script src="js/geraNavegacao.js"></script>
+        <script src="js/ajax.custom.js"></script>
+        <script src="js/mustache.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
                 geraNavegacao();
@@ -29,26 +31,26 @@ and open the template in the editor.
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
-            google.charts.load('current', {'packages': ['corechart']});
-            google.charts.setOnLoadCallback(drawChart);
-            function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                    ['Vendas', 'VR', 'BM'],
-                    ['Jan', 1000, 400],
-                    ['Fev', 1170, 460],
-                    ['Mar', 660, 1120],
-                    ['Abr', 1030, 540]
-                ]);
-
-                var options = {
-                    title: 'Performace de Vendas Por Filial',
-                    hAxis: {title: 'Vendas', titleTextStyle: {color: '#333'}},
-                    vAxis: {minValue: 0}
-                };
-
-                var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-                chart.draw(data, options);
-            }
+//            google.charts.load('current', {'packages': ['corechart']});
+//            google.charts.setOnLoadCallback(drawChart);
+//            function drawChart() {
+//                var data = google.visualization.arrayToDataTable([
+//                    ['Vendas', 'VR', 'BM'],
+//                    ['Jan', 1000, 400],
+//                    ['Fev', 1170, 460],
+//                    ['Mar', 660, 1120],
+//                    ['Abr', 1030, 540]
+//                ]);
+//
+//                var options = {
+//                    title: 'Performace de Vendas Por Filial',
+//                    hAxis: {title: 'Vendas', titleTextStyle: {color: '#333'}},
+//                    vAxis: {minValue: 0}
+//                };
+//
+//                var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+//                chart.draw(data, options);
+//            }
         </script>
     </head>
     <body>
@@ -58,13 +60,23 @@ and open the template in the editor.
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
              mdl-layout--fixed-header">
             <header class="mdl-layout__header">
+
                 <div class="mdl-layout__header-row">
                     <!-- Title -->
                     <span class="mdl-layout-title">Sua Empresa</span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <!-- Navigation. We hide it in small screens. -->
+                    <nav class="mdl-navigation">
+                        <button id="demo-menu-lower-right"
+                                class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">more_vert</i>
+                        </button>
 
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="demo-menu-lower-right" id="listaDeFiliais">
+                        </ul>
+                    </nav>
                 </div>
             </header>
             <div class="mdl-layout__drawer">
@@ -76,18 +88,18 @@ and open the template in the editor.
             <main class="mdl-layout__content" style="float: left">
                 <div class="page-content visible" id="content">
 
-                    <div style="margin: 0 auto; margin-top: 10px" class="demo-card-wide mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__supporting-text"><div id="chart_div">
-                                <div id="spinner2" style="margin: 0 auto;position:fixed;top:25%;left:45%" class="mdl-spinner mdl-js-spinner is-active">
-                                </div>
-                            </div></div>
-                        <div class="mdl-card__actions mdl-card--border">
-                            <a style="float: right" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--raised">
-                                Ir para Vendas
-                            </a>
-                            <div class="mdl-layout-spacer"></div>
-                        </div>
-                    </div>
+                    <!--                    <div style="margin: 0 auto; margin-top: 10px" class="demo-card-wide mdl-card mdl-shadow--2dp">
+                                            <div class="mdl-card__supporting-text"><div id="chart_div">
+                                                    <div id="spinner2" style="margin: 0 auto;position:fixed;top:25%;left:45%" class="mdl-spinner mdl-js-spinner is-active">
+                                                    </div>
+                                                </div></div>
+                                            <div class="mdl-card__actions mdl-card--border">
+                                                <a style="float: right" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--raised">
+                                                    Ir para Vendas
+                                                </a>
+                                                <div class="mdl-layout-spacer"></div>
+                                            </div>
+                                        </div>-->
 
 
 

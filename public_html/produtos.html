@@ -30,7 +30,7 @@ and open the template in the editor.
                 geraNavegacao();
                 buscaProdutoPorFilial();
                 preparaModel(buscaProdutoPorFilial, ZeraIdProduto);
-                buscaMarcasPorFilial();
+                buscaMarcasPorEmpresa();
                 buscaCategoriasPorEmpresa();
             });
 
@@ -69,7 +69,16 @@ and open the template in the editor.
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <!-- Navigation. We hide it in small screens. -->
+                    <nav class="mdl-navigation">
+                        <button id="demo-menu-lower-right"
+                                class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">more_vert</i>
+                        </button>
 
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="demo-menu-lower-right" id="listaDeFiliais">
+                        </ul>
+                    </nav>
                 </div>
             </header>
             <div class="mdl-layout__drawer">
@@ -77,8 +86,8 @@ and open the template in the editor.
                 <nav class="mdl-navigation" id="navegador">
                 </nav>
             </div>
-            <main class="mdl-layout__content">
-                <div class="page-content" style="width: 100%;height: 100%">
+            <main class="mdl-layout__content" >
+                <div class="page-content">
                     <form>
                         <div id="myModal2" class="modal">
                             <!-- Modal content -->
@@ -119,7 +128,7 @@ and open the template in the editor.
                         <!-- The Modal -->
                         <div id="myModal" class="modal" >
                             <!-- Modal content -->
-                            <div class="modal-content" style="width: 100%;">
+                            <div class="modal-content">
                                 <div class="mdl-card  mdl-card_wide mdl mdl-shadow--6dp card-wide">
                                     <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
                                         <h4 class="mdl-card__title-text">Dados Produto</h4>
@@ -186,7 +195,7 @@ and open the template in the editor.
                             <i class="material-icons">add</i>
                         </button>
                     </form>
-                    <div style="width: 100%;overflow: auto">
+                    <div >
 
                         <table class="mdl-data-table mdl-js-data-table " id="tbFiliais" style="width: 100%;height: 100%;">
                             <thead>

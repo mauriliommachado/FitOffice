@@ -118,3 +118,12 @@ function preparaModel2() {
     } catch (e) {
     }
 }  
+
+function getFilialAtiva(){
+    return window.sessionStorage.getItem("filial");
+}
+function getEmpresaAtiva(){
+    return window.sessionStorage.getItem("company");
+}
+
+

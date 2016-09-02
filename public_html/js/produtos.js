@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var id = 3;
 var idProduto = 0;
-var idEmpresa = 1;
 var url = window.sessionStorage.getItem('baseUrl');
 function buscaProdutoPorFilial() {
-    chamadaWs("ServiceProduto/buscaPorFilial/" + id, "GET", null, retornoBuscaProduto);
+    chamadaWs("ServiceProduto/buscaPorFilial/" + getFilialAtiva(), "GET", null, retornoBuscaProduto);
 }
 
 
@@ -23,9 +21,7 @@ function deletaProduto() {
         someModel();
         return;
     }
-    var client = new XMLHttpRequest();
     chamadaWs("ServiceProduto/delete/" + idProduto, "GET", null, retornaDeletaProduto);
-    client.open("GET", url + "ServiceProduto/delete/" + idProduto);
 }
 
 function retornaDeletaProduto(client) {
@@ -57,7 +53,7 @@ function preencheCampos(response) {
         $(resposta).each(function (i, v) {
             if (idProduto != 0) {
                 if (idProduto == v.codProduto) {
-                    buscaMarcasPorFilial();
+                    buscaMarcasPorEmpresa();
                     buscaCategoriasPorEmpresa();
                     if (v.proDescricao != "") {
                         $("#proDescricao").parent().addClass("is-dirty");
@@ -167,7 +163,7 @@ function  retornoGravaMarca(client) {
     var data = {message: 'Salvo com Sucesso!'};
     snackbarContainer.MaterialSnackbar.showSnackbar(data);
 
-    buscaMarcasPorFilial();
+    buscaMarcasPorEmpresa();
     document.getElementById('myModal2').style.display = 'none';
     mostraModel();
 }
@@ -206,7 +202,7 @@ function formToJSON() {
         "proReferencia": $("#proReferencia").val(),
         "codMarca": {"codMarca": $("#cmbMarca").val(), "marDescricao": ""},
         "codCategoria": {"codCategoria": $("#cmbCategorias").val(), "catDescricao": ""},
-        "codFilial": {"codFilial": id}
+        "codFilial": {"codFilial": getFilialAtiva()}
     });
 }
 
@@ -214,7 +210,7 @@ function formToJSONMarca() {
     return JSON.stringify({
         "codMarca": null,
         "marDescricao": $('#novaMarca').val(),
-        "codEmpresa": {"codEmpresa": idEmpresa}
+        "codEmpresa": {"codEmpresa": getEmpresaAtiva()}
     });
 }
 
@@ -222,7 +218,7 @@ function formToJSONCategoria() {
     return JSON.stringify({
         "codCategoria": null,
         "catDescricao": $('#novaCategoria').val(),
-        "codEmpresa": {"codEmpresa": idEmpresa}
+        "codEmpresa": {"codEmpresa": getEmpresaAtiva()}
     });
 }
 
@@ -237,8 +233,8 @@ function retornoBuscaMarcas(client) {
     preencheComboMarcas(client.responseText);
 }
 
-function buscaMarcasPorFilial() {
-    chamadaWs("ServiceMarca/busca", "GET", null, retornoBuscaMarcas);
+function buscaMarcasPorEmpresa() {
+    chamadaWs("ServiceMarca/buscaPorEmpresa/"+getEmpresaAtiva(), "GET", null, retornoBuscaMarcas);
 }
 
 function preencheComboMarcas(json) {

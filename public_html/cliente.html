@@ -34,7 +34,8 @@ and open the template in the editor.
                 $("#endCep").mask("##.###-###");
                 $("button[type='reset']").on("click", function (event) {
                     $(this).closest('form').get(0).reset();
-                    $("#lblAtiva").addClass("is-checked");
+                    $("#lblAtiva").removeClass("is-checked");
+                    resetForm();
                 });
             });
 
@@ -70,6 +71,16 @@ and open the template in the editor.
                     <span class="mdl-layout-title">Sua Empresa - Pessoas</span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
+                    <nav class="mdl-navigation">
+                        <button id="demo-menu-lower-right"
+                                class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">more_vert</i>
+                        </button>
+
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="demo-menu-lower-right" id="listaDeFiliais">
+                        </ul>
+                    </nav>
                     <!-- Navigation. We hide it in small screens. -->
 
                 </div>
@@ -211,17 +222,17 @@ and open the template in the editor.
                                     <th class="mdl-data-table__cell--non-numeric">Tipo</th>
                                     <th class="mdl-data-table__cell--non-numeric">Situação</th>
                                     <th>
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-                                <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
-                                    <i class="material-icons">search</i>
-                                </label>
-                                <div class="mdl-textfield__expandable-holder">
-                                    <input class="mdl-textfield__input" type="text" id="sample6" onkeyup="DigitaFiltro('tbFiliais', 'sample6')">
-                                    <label class="mdl-textfield__label" for="sample-expandable">Filtrar</label>
-                                </div>
-                            </div>
-                            </th>
-                            </tr>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                                            <label class="mdl-button mdl-js-button mdl-button--icon" for="sample6">
+                                                <i class="material-icons">search</i>
+                                            </label>
+                                            <div class="mdl-textfield__expandable-holder">
+                                                <input class="mdl-textfield__input" type="text" id="sample6" onkeyup="DigitaFiltro('tbFiliais', 'sample6')">
+                                                <label class="mdl-textfield__label" for="sample-expandable">Filtrar</label>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody>
 
