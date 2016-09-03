@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-idFilial=1;
+idFilial = 1;
 
 function geraNavegacao() {
     $('#navegador').html('<a class="mdl-navigation__link" href="principal.html">Home</a>\n\
@@ -28,15 +28,24 @@ function preecheFiliais() {
 function retornaFiliais(client) {
     var resposta = JSON.parse(client.responseText);
     $(resposta).each(function (i, v) {
-        var template = '<li class="mdl-menu__item" id={{codFilial}} onclick="setaFilialAtiva({{codFilial}})">{{filNomeFantasia}}</li>';
+        var template;
+        if (getFilialAtiva()===null) {
+            setaFilialAtiva(v.codFilial);
+        }
+        if (v.codFilial == getFilialAtiva()) {
+            template = '<li disabled class="mdl-menu__item" id={{codFilial}} onclick="setaFilialAtiva({{codFilial}})">{{filNomeFantasia}}</li>';
+        } else {
+            template = '<li class="mdl-menu__item" id={{codFilial}} onclick="setaFilialAtiva({{codFilial}})">{{filNomeFantasia}}</li>';
+        }
         var info = Mustache.render(template, v);
         $('#listaDeFiliais').append(info);
     });
 }
 
-function setaFilialAtiva(id){
+function setaFilialAtiva(id) {
     window.sessionStorage.setItem('filial', id);
     $('#listaDeFiliais').parent().removeClass("is-visible");
+    location.reload();
 }
 
 

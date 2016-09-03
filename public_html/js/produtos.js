@@ -244,6 +244,7 @@ function preencheComboMarcas(json) {
         var template = $('#templateCombo').html();
         var info = Mustache.render(template, v);
         $('#cmbMarca').append(info);
+        $("#cmbMarca").parent().addClass("is-dirty");
     });
 }
 

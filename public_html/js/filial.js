@@ -6,51 +6,48 @@
 var idFilial = 0;
 var url = window.sessionStorage.getItem('baseUrl');
 function buscaFilialPorEmpresa() {
-
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServiceFilial/buscaPorEmpresa/" + getEmpresaAtiva());
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            preencheCampos(client.responseText);
-            preencheLista(client.responseText, false);
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+    chamadaWs("ServiceFilial/buscaPorEmpresa/" + getEmpresaAtiva(), "GET", null, retornoFilialPorEmpresa);
 }
 
+Mustache.Formatters = {
+    cnpj: function (str) {
+        return cpfCnpj(str);
+    }
+};
+
+function retornoFilialPorEmpresa(client) {
+    if (client.responseText === "") {
+        return;
+    }
+    preencheCampos(client.responseText);
+    preencheLista(client.responseText, false);
+    $('#spinner').removeClass('is-active');
+}
+
+function retornoDeletaFilial(client) {
+    if (client.responseText === "") {
+        return;
+    }
+    idFilial = 0;
+    if (Boolean(client.responseText) == true) {
+        var snackbarContainer = document.querySelector('#demo-toast-example');
+        'use strict';
+        var data = {message: 'Deletado com Sucesso!'};
+        snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    }
+    someModel();
+
+    buscaFilialPorEmpresa();
+    $('#spinner').removeClass('is-active');
+}
 
 function deletaFilial() {
     if (idFilial <= 0) {
         someModel();
         return;
     }
-    var client = new XMLHttpRequest();
-    client.open("GET", url+"ServiceFilial/delete/" + idFilial);
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            if (client.responseText === "") {
-                return;
-            }
-            idFilial = 0;
-            if (Boolean(client.responseText) == true) {
-                var snackbarContainer = document.querySelector('#demo-toast-example');
-                'use strict';
-                var data = {message: 'Deletado com Sucesso!'};
-                snackbarContainer.MaterialSnackbar.showSnackbar(data);
-            }
-            someModel();
 
-            buscaFilialPorEmpresa();
-            $('#spinner').removeClass('is-active');
-        }
-    };
-    client.send();
+    chamadaWs("ServiceFilial/delete/" + idFilial, "GET", null, retornoDeletaFilial);
 }
 
 function btnGravar() {
@@ -98,6 +95,11 @@ function preencheCampos(response) {
                         $("#inscricaoEstadual").parent().removeClass("is-invalid");
                         $("#inscricaoEstadual").parent().removeClass("is-dirty");
                     }
+                    if (v.filAtiva == true) {
+                        $("#filAtiva").parent().addClass("is-checked");
+                    } else {
+                        $("#filAtiva").parent().removeClass("is-checked");
+                    }
                     if (v.filNumero != "") {
                         $("#numero").parent().addClass("is-dirty");
                     } else {
@@ -121,32 +123,12 @@ function preencheCampos(response) {
 function preencheLista(response, replace) {
     $.getScript('js/validacoes.js', function ()
     {
-        var resposta = JSON.parse(response);
-        var html = '';
         $("#tbFiliais tbody").html('');
+        var resposta = JSON.parse(response);
         $(resposta).each(function (i, v) {
-            html += '<tr id=' + v.codFilial + '>';
-            html += '<td class="mdl-data-table__cell--non-numeric">' + v.filNomeFantasia + '</td>';
-            html += '<td class="mdl-data-table__cell--non-numeric">' + v.filRazaoSocial + '</td>';
-            html += '<td >' + v.filNumero + '</td>';
-            html += '<td>' + cpfCnpj(v.filCNPJ) + '</td>';
-            if (v.filAtiva) {
-                html += '<td class="mdl-data-table__cell--non-numeric">Ativa</td>';
-            } else {
-                html += '<td class="mdl-data-table__cell--non-numeric">Inativa</td>';
-            }
-            if (v.codFilial == idFilial) {
-                html += '<td><button id="btnSelecionar"\n\
- class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect "\n\
- disabled style="float: right"><i class="material-icons">edit</i></button></td>';
-            } else {
-                html += '<td><button id="btnSelecionar"\n\
- class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"\n\
- style="float: right" onclick="idFilial=' + v.codFilial + ';btnSeleciona();"><i class="material-icons">edit</i></button></td>';
-            }
-
-            $("#tbFiliais tbody").append(html);
-            html = '';
+            var template = $('#filial-template').html();
+            var info = Mustache.render(template, v);
+            $('#tbFiliais tbody').append(info);
         });
     });
 }
@@ -164,28 +146,24 @@ function validaCampos() {
     return retorno;
 }
 
+function retornoGravarFilial(client) {
+    preencheCampos(client.responseText);
+    var snackbarContainer = document.querySelector('#demo-toast-example');
+    'use strict';
+    var data = {message: 'Salvo com Sucesso!'};
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+    idFilial = 0;
+    buscaFilialPorEmpresa();
+}
+
 function gravaFilial() {
     if (!validaCampos()) {
         return;
     }
     someModel();
-    var client = new XMLHttpRequest();
-    client.open("PUT", url+"ServiceFilial/grava");
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200)
-        {
-            preencheCampos(client.responseText);
-            var snackbarContainer = document.querySelector('#demo-toast-example');
-            'use strict';
-            var data = {message: 'Salvo com Sucesso!'};
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
 
-            idFilial = 0;
-            buscaFilialPorEmpresa();
-        }
-    };
-    var json = formToJSON();
-    client.send(json);
+    chamadaWs("ServiceFilial/grava", "PUT", formToJSON(), retornoGravarFilial);
 }
 
 String.prototype.replaceCustom = function (de, para) {
@@ -199,7 +177,7 @@ String.prototype.replaceCustom = function (de, para) {
 };
 function formToJSON() {
     return JSON.stringify({
-        "filAtiva": true,
+        "filAtiva": $('#filAtiva').parent().hasClass('is-checked'),
         "codFilial": $('#id').val() == "" ? 0 : $('#id').val(),
         "filNumero": $('#numero').val(),
         "filRazaoSocial": $('#razaoSocial').val(),
@@ -210,8 +188,8 @@ function formToJSON() {
     });
 }
 
-function ZeraIdFilial(){
-    idFilial=0;
+function ZeraIdFilial() {
+    idFilial = 0;
 }
 
 

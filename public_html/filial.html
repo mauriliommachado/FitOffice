@@ -12,12 +12,16 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/material.min.css">
         <script src="js/material.min.js"></script>
         <script src="js/material.js"></script>
+        <link rel="icon" type="image/x-icon" href="./favicon.png">
         <link rel="stylesheet" href="css/icons.css">
         <link rel="stylesheet" href="css/app.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/showToast.js"></script>
+        <script src="js/mustache-wax.js"></script>
+        <script src="js/mustache.js"></script>
         <script src="js/jquery.mask.min.js"></script>
         <script src="js/util.js"></script>
+        <script src="js/ajax.custom.js"></script>
         <script src="js/dialog-polyfill.js"></script>
         <script src="js/showToast.js"></script>
         <script src="js/filial.js"></script>
@@ -32,12 +36,29 @@ and open the template in the editor.
             });
 
         </script>
+        <script id="filial-template" type="text/template">
+      <tr id={{codFilial}}>
+        <td class="mdl-data-table__cell--non-numeric">{{ filNomeFantasia }}</td>
+        <td class="mdl-data-table__cell--non-numeric">{{ filRazaoSocial }}</td>
+        <td class="mdl-data-table__cell--non-numeric">{{ filNumero }}</td>         
+        <td class="mdl-data-table__cell--non-numeric">{{ filCNPJ | cnpj }}</td>
+        {{#filAtiva}}
+        <td class="mdl-data-table__cell--non-numeric">Ativa</td>
+        {{/filAtiva}}
+        {{^filAtiva}}
+        <td class="mdl-data-table__cell--non-numeric">Inativa</td>
+        {{/filAtiva}}
+        <td>
+        <button id="btnSelecionar" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+        style="float: right" onclick="idPessoa={{codPessoa}};btnSeleciona();"><i class="material-icons">edit</i>
+        </button>
+        </td>
+      </tr>
+        </script>
     </head>
     <body>
-
         <div id="spinner" style="margin: 0 auto;position:fixed;top:25%;left:45%" class="mdl-spinner mdl-js-spinner is-active">
         </div>
-
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
              mdl-layout--fixed-header">
             <header class="mdl-layout__header">
@@ -108,13 +129,14 @@ and open the template in the editor.
                                         </div>
 
                                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="ativa">
-                                            <span class="mdl-switch__label" id="tst">Ativa</span>
+                                            <span class="mdl-switch__label" id="filAtiva">Ativa</span>
                                             <input type="checkbox" id="ativa" class="mdl-switch__input" checked>
                                         </label>
 
                                     </div>
                                     <div class="mdl-card__actions mdl-card--border">
-                                        <button type="button" id="demo-show-toast" class="close mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" style="float: right" onclick="gravaFilial();"><i class="material-icons">check</i></button>
+                                        <button type="button" class="close mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect " style="float: right;margin: 2px" onclick="someModel()"><i class="material-icons">&#xE5C9;</i></button>
+                                        <button type="button" id="demo-show-toast" class="close mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" style="float: right;margin: 2px" onclick="gravaFilial();"><i class="material-icons">check</i></button>
                                     </div>
                                 </div>
                             </div>
@@ -130,8 +152,8 @@ and open the template in the editor.
                                 <tr>
                                     <th class="mdl-data-table__cell--non-numeric">Filial</th>
                                     <th class="mdl-data-table__cell--non-numeric">Razão Social</th>
-                                    <th >Número</th>
-                                    <th>CNPJ</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Número</th>
+                                    <th class="mdl-data-table__cell--non-numeric">CNPJ</th>
                                     <th class="mdl-data-table__cell--non-numeric">Situação</th>
                                     <th>
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
@@ -146,7 +168,7 @@ and open the template in the editor.
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody> 
 
                             </tbody>
                         </table>
