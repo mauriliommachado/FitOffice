@@ -17,6 +17,7 @@ and open the template in the editor.
         <script src="js/jquery.min.js"></script>
         <script src="js/showToast.js"></script>
         <script src="js/ajax.custom.js"></script>
+        <script src="js/jquery.mask.min.js"></script>
         <script src="js/empresa.js"></script>
         <script src="js/util.js"></script>
         <script src="js/geraNavegacao.js"></script>
@@ -24,6 +25,7 @@ and open the template in the editor.
             $(document).ready(function () {
                 geraNavegacao();
                 buscaEmpresa();
+                $("#cnpj").mask("##.###.###/####-##");
             });
         </script>
     </head>
