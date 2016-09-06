@@ -240,7 +240,7 @@ function gravaPessoa() {
         return;
     }
     someModel();
-    chamadaWs("ServicePessoa/grava", "PUT", formToJSON(), retornoGravaPessoa)
+    chamadaWs("ServicePessoa/grava", "PUT", formToJSON(), retornoGravaPessoa);
 }
 
 function retornoGravaPessoa(client) {
@@ -283,7 +283,7 @@ function formToJSON() {
                 "endNumero": $("#endNumero").val(),
                 "endBairro": $("#endBairro").val(),
                 "endCidade": $("#endCidade").val(),
-                "endUF": $("#endUf").val()==""?null:("#endUf").val(),
+                "endUF": $("#endUf").val(),
                 "endReferencia": $("#endReferencia").val(),
                 "endComplemento": $("#endComplemento").val()
             }]
