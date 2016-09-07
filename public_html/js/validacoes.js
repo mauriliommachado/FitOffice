@@ -7,6 +7,7 @@
 
 function cpfCnpj(v) {
 
+try{
     //Remove tudo o que não é dígito
     v = v.replace(/\D/g, "");
 
@@ -38,5 +39,5 @@ function cpfCnpj(v) {
 
 
     return v;
-
+}catch(ex) {return ""}
 }

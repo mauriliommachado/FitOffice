@@ -42,129 +42,130 @@ function btnGravar() {
 }
 
 function preencheCampos(response) {
-    $.getScript('js/validacoes.js', function ()
-    {
-        var resposta = JSON.parse(response);
-        // script is now loaded and executed.
-        // put your dependent JS here.
 
-        $(resposta).each(function (i, v) {
-            $("#pesDtCadastro").parent().addClass("is-dirty");
-            if (idPessoa != 0) {
-                if (idPessoa == v.codPessoa) {
-                    resetForm();
-                    if (v.pesNome != "") {
-                        $("#pesNome").parent().addClass("is-dirty");
-                    } else {
-                        $("#pesNome").parent().removeClass("is-invalid");
-                        $("#pesNome").parent().removeClass("is-dirty");
-                    }
-                    if (v.codPessoa != "") {
-                        $("#id").parent().addClass("is-dirty");
-                    } else {
-                        $("#id").parent().removeClass("is-invalid");
-                        $("#id").parent().removeClass("is-dirty");
-                    }
-                    if (v.pesCPF != "") {
-                        $("#cpf").parent().addClass("is-dirty");
-                    } else {
-                        $("#cpf").parent().removeClass("is-invalid");
-                        $("#cpf").parent().removeClass("is-dirty");
-                    }
-                    if (v.Cod_Tipo_Pessoa != "") {
-                        $("#cmbTipo").parent().addClass("is-dirty");
-                    } else {
-                        $("#cmbTipo").parent().removeClass("is-invalid");
-                        $("#cmbTipo").parent().removeClass("is-dirty");
-                    }
-                    if (v.pesEmail != "") {
-                        $("#pesEmail").parent().addClass("is-dirty");
-                    } else {
-                        $("#pesEmail").parent().removeClass("is-invalid");
-                        $("#pesEmail").parent().removeClass("is-dirty");
-                    }
-                    if (v.pesEmail != "") {
-                        $("#pesSenha").parent().addClass("is-dirty");
-                    } else {
-                        $("#pesSenha").parent().removeClass("is-invalid");
-                        $("#pesSenha").parent().removeClass("is-dirty");
-                    }
-                    if (v.pesFisica != "") {
-                        $("#pesFisica").parent().addClass("is-dirty");
-                    } else {
-                        $("#pesFisica").parent().removeClass("is-invalid");
-                        $("#pesFisica").parent().removeClass("is-dirty");
-                    }
-                    if (v.pesDtCadastro != "") {
-                        $("#pesDtCadastro").parent().addClass("is-dirty");
-                    } else {
-                        $("#pesDtCadastro").parent().removeClass("is-invalid");
-                        $("#pesDtCadastro").parent().removeClass("is-dirty");
-                    }
-                    if (v.pesAtivo == true) {
-                        $("#lblAtiva").addClass("is-checked");
-                    } else {
-                        $("#lblAtiva").removeClass("is-checked");
-                    }
-                    if (v.enderecoList.length > 0) {
-                        if (v.enderecoList[0].endCep != "") {
-                            $("#endCep").parent().addClass("is-dirty");
-                        }
-                        if (v.enderecoList[0].endLogradouro != "") {
-                            $("#endLogradouro").parent().addClass("is-dirty");
-                        }
-                        if (v.enderecoList[0].endNumero != "") {
-                            $("#endNumero").parent().addClass("is-dirty");
-                        }
-                        if (v.enderecoList[0].endBairro != "") {
-                            $("#endBairro").parent().addClass("is-dirty");
-                        }
-                        if (v.enderecoList[0].endCidade != "") {
-                            $("#endCidade").parent().addClass("is-dirty");
-                        }
-                        if (v.enderecoList[0].endUf != "") {
-                            $("#endUf").parent().addClass("is-dirty");
-                        }
-                        if (v.enderecoList[0].endComplemento != "") {
-                            $("#endComplemento").parent().addClass("is-dirty");
-                        }
-                        if (v.enderecoList[0].endReferencia != "") {
-                            $("#endReferencia").parent().addClass("is-dirty");
-                        }
-                        $('#endComplemento').val(v.enderecoList[0].endComplemento == null ? "" : v.enderecoList[0].endComplemento);
-                        $('#codEndereco').val(v.enderecoList[0].codEndereco);
-                        $('#endUf').val(v.enderecoList[0].endUF);
-                        $('#endCidade').val(v.enderecoList[0].endCidade);
-                        $('#endBairro').val(v.enderecoList[0].endBairro);
-                        $('#endNumero').val(v.enderecoList[0].endNumero);
-                        $('#endLogradouro').val(v.enderecoList[0].endLogradouro);
-                        $('#endReferencia').val(v.enderecoList[0].endReferencia);
-                        $('#endCep').val(v.enderecoList[0].endCep);
-                    } else {
-                        $('#endComplemento').val("");
-                        $('#codEndereco').val("");
-                        $('#endUf').val("");
-                        $('#endCidade').val("");
-                        $('#endBairro').val("");
-                        $('#endNumero').val("");
-                        $('#endLogradouro').val("");
-                        $('#endCep').val("");
-                        $('#endReferencia').val("");
-                    }
-                    $('#pesNome').val(v.pesNome);
-                    $('#id').val(v.codPessoa);
-                    $('#cmbTipo').val(v.codTipoPessoa);
-                    $('#cpf').val(cpfCnpj(v.pesCPF));
-                    $('#pesEmail').val(v.pesEmail);
-                    $('#pesFisica').val(v.pesFisica);
-                    $('#pesSenha').val(v.pesSenha);
-                    $('#pesDtCadastro').val(v.pesDtCadastro);
+    var resposta = JSON.parse(response);
+    // script is now loaded and executed.
+    // put your dependent JS here.
 
-                    return false;
+    $(resposta).each(function (i, v) {
+        resetForm();
+        $("#pesDtCadastro").parent().addClass("is-dirty");
+        if (idPessoa != 0) {
+            if (idPessoa == v.codPessoa) {
+                
+                if (v.pesNome != "") {
+                    $("#pesNome").parent().addClass("is-dirty");
+                } else {
+                    $("#pesNome").parent().removeClass("is-invalid");
+                    $("#pesNome").parent().removeClass("is-dirty");
                 }
+                if (v.codPessoa != "") {
+                    $("#id").parent().addClass("is-dirty");
+                } else {
+                    $("#id").parent().removeClass("is-invalid");
+                    $("#id").parent().removeClass("is-dirty");
+                }
+                if (v.pesCPF != "") {
+                    $("#cpf").parent().addClass("is-dirty");
+                } else {
+                    $("#cpf").parent().removeClass("is-invalid");
+                    $("#cpf").parent().removeClass("is-dirty");
+                }
+                if (v.Cod_Tipo_Pessoa != "") {
+                    $("#cmbTipo").parent().addClass("is-dirty");
+                } else {
+                    $("#cmbTipo").parent().removeClass("is-invalid");
+                    $("#cmbTipo").parent().removeClass("is-dirty");
+                }
+                if (v.pesEmail != "") {
+                    $("#pesEmail").parent().addClass("is-dirty");
+                } else {
+                    $("#pesEmail").parent().removeClass("is-invalid");
+                    $("#pesEmail").parent().removeClass("is-dirty");
+                }
+                if (v.pesEmail != "") {
+                    $("#pesSenha").parent().addClass("is-dirty");
+                } else {
+                    $("#pesSenha").parent().removeClass("is-invalid");
+                    $("#pesSenha").parent().removeClass("is-dirty");
+                }
+                if (v.pesFisica != "") {
+                    $("#pesFisica").parent().addClass("is-dirty");
+                } else {
+                    $("#pesFisica").parent().removeClass("is-invalid");
+                    $("#pesFisica").parent().removeClass("is-dirty");
+                }
+                if (v.pesDtCadastro != "") {
+                    $("#pesDtCadastro").parent().addClass("is-dirty");
+                } else {
+                    $("#pesDtCadastro").parent().removeClass("is-invalid");
+                    $("#pesDtCadastro").parent().removeClass("is-dirty");
+                }
+                if (v.pesAtivo == true) {
+                    $("#lblAtiva").addClass("is-checked");
+                } else {
+                    $("#lblAtiva").removeClass("is-checked");
+                }
+                if (v.enderecoList.length > 0) {
+                    if (v.enderecoList[0].endCep != "") {
+                        $("#endCep").parent().addClass("is-dirty");
+                    }
+                    if (v.enderecoList[0].endLogradouro != "") {
+                        $("#endLogradouro").parent().addClass("is-dirty");
+                    }
+                    if (v.enderecoList[0].endNumero != "") {
+                        $("#endNumero").parent().addClass("is-dirty");
+                    }
+                    if (v.enderecoList[0].endBairro != "") {
+                        $("#endBairro").parent().addClass("is-dirty");
+                    }
+                    if (v.enderecoList[0].endCidade != "") {
+                        $("#endCidade").parent().addClass("is-dirty");
+                    }
+                    if (v.enderecoList[0].endUf != "") {
+                        $("#endUf").parent().addClass("is-dirty");
+                    }
+                    if (v.enderecoList[0].endComplemento != "") {
+                        $("#endComplemento").parent().addClass("is-dirty");
+                    }
+                    if (v.enderecoList[0].endReferencia != "") {
+                        $("#endReferencia").parent().addClass("is-dirty");
+                    }
+                    $('#endComplemento').val(v.enderecoList[0].endComplemento == null ? "" : v.enderecoList[0].endComplemento);
+                    $('#codEndereco').val(v.enderecoList[0].codEndereco);
+                    $('#endUf').val(v.enderecoList[0].endUF);
+                    $('#endCidade').val(v.enderecoList[0].endCidade);
+                    $('#endBairro').val(v.enderecoList[0].endBairro);
+                    $('#endNumero').val(v.enderecoList[0].endNumero);
+                    $('#endLogradouro').val(v.enderecoList[0].endLogradouro);
+                    $('#endReferencia').val(v.enderecoList[0].endReferencia);
+                    $('#endCep').val(v.enderecoList[0].endCep);
+                } else {
+                    $('#endComplemento').val("");
+                    $('#codEndereco').val("");
+                    $('#endUf').val("");
+                    $('#endCidade').val("");
+                    $('#endBairro').val("");
+                    $('#endNumero').val("");
+                    $('#endLogradouro').val("");
+                    $('#endCep').val("");
+                    $('#endReferencia').val("");
+                }
+                $('#pesNome').val(v.pesNome);
+                $('#id').val(v.codPessoa);
+                $('#cmbTipo').val(v.codTipoPessoa);
+                var strCpf = cpfCnpj(v.pesCPFCNPJ);
+                $('#cpf').val(strCpf);
+                $('#pesEmail').val(v.pesEmail);
+                $('#pesFisica').val(v.pesFisica);
+                $('#pesSenha').val(v.pesSenha);
+                $('#pesDtCadastro').val(v.pesDtCadastro);
+
+                return false;
             }
-        });
+        }
     });
+
 
 }
 
@@ -269,7 +270,7 @@ function formToJSON() {
         "pesAtivo": $("#lblAtiva").hasClass("is-checked"),
         "codPessoa": $('#id').val() == "" ? 0 : $('#id').val(),
         "codTipoPessoa": $('#cmbTipo').val(),
-        "pesCPF": $('#cpf').val().replaceCustom(".", "").replaceCustom("-", ""),
+        "pesCPFCNPJ": $('#cpf').val().replaceCustom(".", "").replaceCustom("-", ""),
         "pesDtCadastro": $("#pesDtCadastro").val(),
         "pesEmail": $("#pesEmail").val(),
         "pesFisica": true,

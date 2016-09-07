@@ -24,6 +24,7 @@ and open the template in the editor.
         <script src="js/showToast.js"></script>
         <script src="js/ajax.custom.js"></script>
         <script src="js/pessoa.js"></script>
+        <script src="js/validacoes.js"></script>
         <script src="js/geraNavegacao.js"></script>
         <link rel="stylesheet" href="css/dialog-polyfill.css">
         <script type="text/javascript">
@@ -53,7 +54,7 @@ and open the template in the editor.
             <td class="mdl-data-table__cell--non-numeric">Inativo</td>
             {{/pesAtivo}}
             <td>
-            <button id="btnSelecionar" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+            <button id="btnSelecionar" type="reset" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
             style="float: right" onclick="idPessoa={{codPessoa}};btnSeleciona();"><i class="material-icons">edit</i></button>
             </td>
             </tr>
